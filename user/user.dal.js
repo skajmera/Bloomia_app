@@ -1,14 +1,13 @@
 const User=require('./user.model')
 require('../utils/jwt')
 
-const findUsers = async (req) => {
-  const users = await User.findById(req.token_data._id);
-  return users;
+const findUser = async (data) => {
+  const user = await User.findById(data);
+  return user;
 }
 
 const storeUser = async (userToStore) => {
-  const user = new User({ ...userToStore });
-  const storedUser = await user.save();
+  const storedUser = await User.create(userToStore);
   return storedUser;
 };
 
@@ -22,22 +21,12 @@ const updateUser=async(userData)=>{
   return user
 }
 
-const updatePassword=async(userData)=>{
-  const data=await User.findByIdAndUpdate(userData._id,{$set:userData.toUpdate},{new:true})
-  return data
-}
+// const emailVerify=async(resetPassword)=>{
+//   const data=await User.findById(resetPassword);
+//   return data
+// }
 
-const updateProfile=async(userImage)=>{
-  const data=await User.findByIdAndUpdate(userImage._id,{$set:userImage.toUpdate},{new:true})
-  return data
-}
-
-const forgotPass=async(resetPassword)=>{
-  const data=await User.findOne(resetPassword);
-  return data
-}
-
-module.exports={findUsers,storeUser,findUserByUsername,updateUser,updatePassword,updateProfile,forgotPass}
+module.exports={findUser,storeUser,findUserByUsername,updateUser}
 
 
 

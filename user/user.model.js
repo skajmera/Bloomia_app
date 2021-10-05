@@ -1,5 +1,9 @@
 const mongoose = require("mongoose");
 const UserSchema = new mongoose.Schema({
+  isVerified:{
+    type:Boolean,
+    default: false
+  },
   profileImage: {
     type: String,
   },

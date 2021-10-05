@@ -9,7 +9,7 @@ const transPorter=nodeMailer.createTransport({
 
 exports.myFunction = (data) => {
     console.log(data);
-    // Do Something
+    // do something
     transPorter.sendMail(data,(err,info)=>{
         if(err){
             console.log(err.message);

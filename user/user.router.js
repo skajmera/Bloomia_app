@@ -4,8 +4,6 @@ const { authenticateToken } = require("../utils/jwt");
 const router = express.Router();
 const userController = require("../user/user.controller");
 
-// router.put('/upload',authenticateToken, upload.single("attachments"),userController.uploadImage)
-
 router.post('/signup', async (req, res) => {
     const result = await userController.createUser(req);
     return res.send(result);
@@ -37,7 +35,6 @@ router.put('/upload',authenticateToken,upload.single("attachments"),async(req,re
     return res.send(result)
 })
 
-
 router.put('/forgetPassword',authenticateToken,async(req,res)=>{
     const result=await userController.forgotPassword(req);
     return res.send(result)
@@ -45,6 +42,16 @@ router.put('/forgetPassword',authenticateToken,async(req,res)=>{
 
 router.get('/auth/verifyEmail/:id',(req,res)=>{
     res.send ("123456")
+})
+
+router.put('/emailVerified',authenticateToken,async(req,res)=>{
+    const result = await userController.verifyEmail(req);
+    return res.send(result)
+})
+
+router.put('/resetPassword',authenticateToken,async(req,res)=>{
+    const result = await userController.resetPassword(req);
+    return res.send(result)
 })
 
 router.get('/getAll',userController.getAllusers)

@@ -6,7 +6,7 @@ const userModel = require("./user.model");
 const { myFunction } = require("../utils/nodemailer");
 
 exports.getUser = async (req) => {
-  const users = await usersDataAccess.findUsers(req);
+  const users = await usersDataAccess.findUser(req);
   return {
     error: false,
     sucess: true,
@@ -22,6 +22,7 @@ exports.createUser = async (req) => {
   }
   const passwordHash = bcrypt.hashSync(req.body.password, 10);
   const data = {
+    isVerified:false,
     first_name: req.body.first_name,
     last_name: req.body.last_name,
     contact: req.body.number,
@@ -29,7 +30,14 @@ exports.createUser = async (req) => {
     password: passwordHash,
   };
   const storedUser = await usersDataAccess.storeUser(data);
-
+  // console.log(storeUser._id);
+  const otpSend = {
+        from: "subhashajmera2@gmail.com",
+        to: storedUser.email,
+        subject: "Sending email using node.js",
+        text: `http://localhost:3000/users/auth/verifyEmail/${storedUser._id}`,
+      };
+      myFunction(otpSend);      
   return {
     error: false,
     sucess: true,
@@ -87,7 +95,7 @@ exports.updateUser = async (req, res) => {
 
 exports.updatePassword = async (req, res) => {
   const _id = req.token_data._id;
-  const userData = await usersDataAccess.updatePassword({
+  const userData = await usersDataAccess.findUser({
     _id: _id,
   });
   const match = bcrypt.compareSync(req.body.password, userData.password);
@@ -101,7 +109,7 @@ exports.updatePassword = async (req, res) => {
       password: password,
     },
   };
-  const updatePass = await usersDataAccess.updatePassword(updateData);
+  const updatePass = await usersDataAccess.updateUser(updateData);
   return {
     error: false,
     sucess: true,
@@ -122,7 +130,7 @@ exports.uploadImage = async (req, res) => {
       profileImage: image,
     },
   };
-  const updatedProfile = await usersDataAccess.updateProfile(updateImage);
+  const updatedProfile = await usersDataAccess.updateUser(updateImage);
   return {
     error: false,
     sucess: true,
@@ -145,7 +153,7 @@ exports.forgotPassword = async (req, res) => {
   if (!email) {
     return new ExpressError(401, "Either email is missing in the request.");
   }
-  const userData = await usersDataAccess.forgotPass({
+  const userData = await usersDataAccess.findUserByUsername({
     email: req.body.email,
   });
   if (!userData) {
@@ -158,10 +166,72 @@ exports.forgotPassword = async (req, res) => {
     text: `http://localhost:3000/users/auth/verifyEmail/${userData._id}`,
   };
   myFunction(otpSend);
+  const newPassword = bcrypt.hashSync(req.body.newPassword, 10);
+  const _id = req.body._id
+  const updateData = {
+    _id,
+    toUpdate: {
+      password:newPassword
+    },
+  };
+  const update = await usersDataAccess.updateUser(updateData);
   return {
     error: false,
     sucess: true,
-    message: "password successfully generate",
+    message: "forgot password successfully generate",
     data: userData,
+    verify:update
   };
 };
+
+exports.verifyEmail = async (req, res) => {
+  const userData = await usersDataAccess.findUser({
+    _id: req.body._id,
+  });
+  if (!userData) {
+    return new ExpressError(404, "_id does not exists");
+  }
+  const _id = userData._id;
+  const updateData = {
+    _id,
+    toUpdate: {
+      isVerified: true
+    },
+  };
+  const update = await usersDataAccess.updateUser(updateData);
+  return {
+    error: false,
+    sucess: true,
+    message: "email is verified successfully",
+    data: userData,
+    verify:update
+  };
+};
+
+exports.resetPassword = async (req, res) => {
+  const _id = req.token_data._id;
+  const userData = await usersDataAccess.findUser({
+    _id: _id,
+  });
+  const match = bcrypt.compareSync(req.body.password, userData.password);
+  if (!match) {
+    return new ExpressError(403, "Your Old Password is Invalid");
+  }
+  const password = bcrypt.hashSync(req.body.newPassword, 10);
+  const updateData = {
+    _id,
+    toUpdate: {
+      password: password,
+    },
+  };
+  const updatePass = await usersDataAccess.updateUser(updateData);
+  return {
+    error: false,
+    sucess: true,
+    message: "reset password successfully",
+    data: updatePass,
+  };
+};
+
+
+

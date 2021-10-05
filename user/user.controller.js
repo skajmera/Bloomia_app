@@ -180,8 +180,7 @@ exports.forgotPassword = async (req, res) => {
     error: false,
     sucess: true,
     message: "forgot password successfully generate",
-    data: userData,
-    verify: update,
+    data: userData
   };
 };
 
@@ -210,7 +209,7 @@ exports.verifyEmail = async (req, res) => {
 };
 
 exports.resetPassword = async (req, res) => {
-  const _id = req.token_data._id;
+  const _id = req.body._id
   const userData = await usersDataAccess.findUser({
     _id: _id,
   });

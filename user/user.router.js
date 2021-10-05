@@ -40,10 +40,6 @@ router.put('/forgetPassword',authenticateToken,async(req,res)=>{
     return res.send(result)
 })
 
-router.get('/auth/verifyEmail/:id',(req,res)=>{
-    res.send ("123456")
-})
-
 router.put('/emailVerified',authenticateToken,async(req,res)=>{
     const result = await userController.verifyEmail(req);
     return res.send(result)

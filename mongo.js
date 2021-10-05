@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
-const url = "mongodb+srv://subhash:subhash123@cluster0.5luog.mongodb.net/mernstack?retryWrites=true&w=majority";
+require('dotenv').config();
+const url = process.env.url;
 mongoose
   .connect(url, {
     useNewUrlParser: true,

@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
-// const ExpressError=require('../utils/errorGenerator')
+require('dotenv').config();
 function generateAccessToken(username) {
-  return jwt.sign({_id: username._id}, "subhash", { expiresIn: "18000s" });
+  return jwt.sign({_id: username._id}, process.env.secret_key, { expiresIn: "18000s" });
 }
 function authenticateToken(req, res, next) {
   const authHeader = req.headers.cookie;
@@ -9,8 +9,7 @@ function authenticateToken(req, res, next) {
    return res.send("unauthorized")
   }
   const token = authHeader.split("=")[0];
-  // if (token == null) return res.sendStatus(401);
-  jwt.verify(token, "subhash", (err, data) => {
+  jwt.verify(token, process.env.secret_key, (err, data) => {
     if (err) return res.sendStatus(401);
     req.token_data=data
     next();

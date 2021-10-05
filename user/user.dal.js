@@ -21,11 +21,6 @@ const updateUser=async(userData)=>{
   return user
 }
 
-// const emailVerify=async(resetPassword)=>{
-//   const data=await User.findById(resetPassword);
-//   return data
-// }
-
 module.exports={findUser,storeUser,findUserByUsername,updateUser}
 
 

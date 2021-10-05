@@ -6,7 +6,8 @@ const userModel = require("./user.model");
 const { myFunction } = require("../utils/nodemailer");
 
 exports.getUser = async (req) => {
-  const users = await usersDataAccess.findUser(req);
+  const _id=req.token_data._id
+  const users = await usersDataAccess.findUser({_id:_id});
   return {
     error: false,
     sucess: true,

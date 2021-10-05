@@ -1,13 +1,14 @@
 const usersDataAccess = require("./user.dal");
 const bcrypt = require("bcrypt");
+require("dotenv").config();
 const ExpressError = require("../utils/errorGenerator");
 const { generateAccessToken } = require("../utils/jwt");
 const userModel = require("./user.model");
 const { myFunction } = require("../utils/nodemailer");
 
 exports.getUser = async (req) => {
-  const _id=req.token_data._id
-  const users = await usersDataAccess.findUser({_id:_id});
+  const _id = req.token_data._id;
+  const users = await usersDataAccess.findUser({ _id: _id });
   return {
     error: false,
     sucess: true,
@@ -23,7 +24,7 @@ exports.createUser = async (req) => {
   }
   const passwordHash = bcrypt.hashSync(req.body.password, 10);
   const data = {
-    isVerified:false,
+    isVerified: false,
     first_name: req.body.first_name,
     last_name: req.body.last_name,
     contact: req.body.number,
@@ -32,12 +33,12 @@ exports.createUser = async (req) => {
   };
   const storedUser = await usersDataAccess.storeUser(data);
   const otpSend = {
-        from: "subhashajmera2@gmail.com",
-        to: storedUser.email,
-        subject: "Sending email using node.js",
-        text: `http://localhost:3000/users/auth/verifyEmail/${storedUser._id}`,
-      };
-      myFunction(otpSend);      
+    from: process.env.email,
+    to: storedUser.email,
+    subject: "Sending email using node.js",
+    text: `http://localhost:3000/users/auth/verifyEmail/${storedUser._id}`,
+  };
+  myFunction(otpSend);
   return {
     error: false,
     sucess: true,
@@ -134,7 +135,7 @@ exports.uploadImage = async (req, res) => {
   return {
     error: false,
     sucess: true,
-    message: "Uploaded Sucessfully",
+    message: "Uploaded Image Sucessfully",
     data: updatedProfile,
   };
 };
@@ -160,18 +161,18 @@ exports.forgotPassword = async (req, res) => {
     return new ExpressError(404, "email does not exists");
   }
   const otpSend = {
-    from: "subhashajmera2@gmail.com",
+    from: process.env.email,
     to: userData.email,
     subject: "Sending email using node.js",
     text: `http://localhost:3000/users/auth/verifyEmail/${userData._id}`,
   };
   myFunction(otpSend);
   const newPassword = bcrypt.hashSync(req.body.newPassword, 10);
-  const _id = req.body._id
+  const _id = req.body._id;
   const updateData = {
     _id,
     toUpdate: {
-      password:newPassword
+      password: newPassword,
     },
   };
   const update = await usersDataAccess.updateUser(updateData);
@@ -180,7 +181,7 @@ exports.forgotPassword = async (req, res) => {
     sucess: true,
     message: "forgot password successfully generate",
     data: userData,
-    verify:update
+    verify: update,
   };
 };
 
@@ -195,7 +196,7 @@ exports.verifyEmail = async (req, res) => {
   const updateData = {
     _id,
     toUpdate: {
-      isVerified: true
+      isVerified: true,
     },
   };
   const update = await usersDataAccess.updateUser(updateData);
@@ -204,7 +205,7 @@ exports.verifyEmail = async (req, res) => {
     sucess: true,
     message: "email is verified successfully",
     data: userData,
-    verify:update
+    verify: update,
   };
 };
 
@@ -232,6 +233,3 @@ exports.resetPassword = async (req, res) => {
     data: updatePass,
   };
 };
-
-
-

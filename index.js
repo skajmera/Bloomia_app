@@ -1,4 +1,5 @@
 require("./mongo");
+require('dotenv').config();
 const morgan=require('morgan')
 const express = require("express");
 require('express-async-errors')

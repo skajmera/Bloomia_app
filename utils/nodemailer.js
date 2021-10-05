@@ -1,15 +1,14 @@
 const nodeMailer=require('nodemailer');
+require('dotenv').config();
 const transPorter=nodeMailer.createTransport({
     service:"gmail",
     auth:{
-        user:"subhashajmera2@gmail.com",
-        pass:""
+        user:process.env.email,
+        pass:process.env.password
     }
 });
 
 exports.myFunction = (data) => {
-    // console.log(data);
-    // do something
     transPorter.sendMail(data,(err,info)=>{
         if(err){
             console.log(err.message);

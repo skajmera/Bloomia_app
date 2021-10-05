@@ -30,7 +30,6 @@ exports.createUser = async (req) => {
     password: passwordHash,
   };
   const storedUser = await usersDataAccess.storeUser(data);
-  // console.log(storeUser._id);
   const otpSend = {
         from: "subhashajmera2@gmail.com",
         to: storedUser.email,

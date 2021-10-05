@@ -3,12 +3,12 @@ const transPorter=nodeMailer.createTransport({
     service:"gmail",
     auth:{
         user:"subhashajmera2@gmail.com",
-        pass:"s5@9009120899"
+        pass:""
     }
 });
 
 exports.myFunction = (data) => {
-    console.log(data);
+    // console.log(data);
     // do something
     transPorter.sendMail(data,(err,info)=>{
         if(err){

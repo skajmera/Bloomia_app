@@ -36,7 +36,8 @@ exports.createUser = async (req) => {
     from: process.env.email,
     to: storedUser.email,
     subject: "Sending email using node.js",
-    text: `http://localhost:3000/users/auth/verifyEmail/${storedUser._id}`,
+    // text: `http://localhost:3000/users/auth/verifyEmail/${storedUser._id}`,
+    text:`https://bloomia.herokuapp.com/users/${storedUser._id}`
   };
   myFunction(otpSend);
   return {

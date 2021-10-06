@@ -2,13 +2,34 @@ const cron = require('node-cron');
 
 const shell= require('shelljs');
 
-cron.schedule('0 1 * * * *', () => {
+cron.schedule('* * * * * *', () => {
   console.log('running a task every minute');
 
     if(shell.exec("hello world").code !==0){
         console.log("Something went wrong")
     }
-});
+},{
+         scheduled: true,
+         timezone: "America/New_York"
+       });
+
+    //    "start_date": ISODate("2019-01-31T10:00:00.000Z"),
+    //    "end_date": ISODate("2019-01-31T10:59:59.000Z"),
+/////////////////////
+// const CronJob = require('cron').CronJob;
+// const job = new CronJob('46 00 * * *', () => {
+//     console.log('Tik');
+// }, null, true, 'America/New_York');
+// job.start();
+
+// cron.schedule('46 00 * * *',() => {
+//     //code to be executed
+//    console.log("Tik")
+//    },{
+//      scheduled: true,
+//      timezone: "America/New_York"
+//    });
+
 
 // var cron = require('node-cron');
 

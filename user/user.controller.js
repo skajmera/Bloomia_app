@@ -36,8 +36,7 @@ exports.createUser = async (req) => {
     from: process.env.email,
     to: storedUser.email,
     subject: "Sending email using node.js",
-    // text: `http://localhost:3000/users/auth/verifyEmail/${storedUser._id}`,
-    text:`https://bloomia.herokuapp.com/users/${storedUser._id}`
+    text:`https://bloomia.herokuapp.com/users/getUserId/${storedUser._id}`,
   };
   myFunction(otpSend);
   return {
@@ -150,6 +149,10 @@ exports.getAllusers = async (req, res) => {
   }
 };
 
+exports.getId = async (req, res) => {
+    res.send(req.params._id);
+};
+
 exports.forgotPassword = async (req, res) => {
   const { email } = req.body;
   if (!email) {
@@ -165,7 +168,7 @@ exports.forgotPassword = async (req, res) => {
     from: process.env.email,
     to: userData.email,
     subject: "Sending email using node.js",
-    text: `http://localhost:3000/users/auth/verifyEmail/${userData._id}`,
+    text:`https://bloomia.herokuapp.com/users/getUserId/${userData._id}`,
   };
   myFunction(otpSend);
   const newPassword = bcrypt.hashSync(req.body.newPassword, 10);

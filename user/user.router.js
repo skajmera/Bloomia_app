@@ -50,6 +50,8 @@ router.put('/resetPassword',authenticateToken,async(req,res)=>{
     return res.send(result)
 })
 
+router.get('/getUserId/:_id',userController.getId)
+
 router.get('/getAll',userController.getAllusers)
 
 module.exports = router;

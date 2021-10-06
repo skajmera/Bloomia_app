@@ -35,17 +35,17 @@ router.put('/upload',authenticateToken,upload.single("attachments"),async(req,re
     return res.send(result)
 })
 
-router.put('/forgetPassword',authenticateToken,async(req,res)=>{
+router.put('/forgetPassword',async(req,res)=>{
     const result=await userController.forgotPassword(req);
     return res.send(result)
 })
 
-router.put('/emailVerified',authenticateToken,async(req,res)=>{
+router.put('/emailVerified',async(req,res)=>{
     const result = await userController.verifyEmail(req);
     return res.send(result)
 })
 
-router.put('/resetPassword',authenticateToken,async(req,res)=>{
+router.put('/resetPassword',async(req,res)=>{
     const result = await userController.resetPassword(req);
     return res.send(result)
 })

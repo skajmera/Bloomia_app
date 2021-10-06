@@ -16,7 +16,7 @@ router.get('/getUser',authenticateToken,async (request, response) => {
 
 router.post('/login',async(req,res)=>{
     const result=await userController.loginUser(req);
-    res.cookie(result.token);
+    res.cookie("token",result.token);
     return res.json({result})
 })
 

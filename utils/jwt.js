@@ -8,7 +8,7 @@ function authenticateToken(req, res, next) {
   if(authHeader===undefined){
    return res.send("unauthorized")
   }
-  const token = authHeader.split("=")[0];
+  const token = authHeader.split("=")[1];
   jwt.verify(token, process.env.secret_key, (err, data) => {
     if (err) return res.sendStatus(401);
     req.token_data=data

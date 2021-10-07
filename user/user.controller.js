@@ -1,10 +1,12 @@
 const usersDataAccess = require("./user.dal");
 const bcrypt = require("bcrypt");
+const moment=require('moment')
 require("dotenv").config();
 const ExpressError = require("../utils/errorGenerator");
 const { generateAccessToken } = require("../utils/jwt");
 const userModel = require("./user.model");
 const { myFunction } = require("../utils/nodemailer");
+const { memoryStorage } = require("multer");
 
 exports.getUser = async (req) => {
   const _id = req.token_data._id;
@@ -27,7 +29,7 @@ exports.createUser = async (req) => {
     isVerified: false,
     first_name: req.body.first_name,
     last_name: req.body.last_name,
-    contact: req.body.number,
+    contact: req.body.contact,
     email: req.body.email,
     password: passwordHash,
   };
@@ -80,7 +82,7 @@ exports.updateUser = async (req, res) => {
   const updateData = {
     _id,
     toUpdate: {
-      contact: req.body.number,
+      contact: req.body.contact,
       first_name: req.body.first_name,
       last_name: req.body.last_name,
     },
@@ -141,12 +143,8 @@ exports.uploadImage = async (req, res) => {
 };
 
 exports.getAllusers = async (req, res) => {
-  try {
-    const data = await userModel.find({});
-    res.send(data);
-  } catch (err) {
-    res.send(err);
-  }
+    const users = await usersDataAccess.findAll();
+    return(users);
 };
 
 exports.getId = async (req, res) => {
@@ -234,5 +232,25 @@ exports.resetPassword = async (req, res) => {
     sucess: true,
     message: "reset password successfully",
     data: updatePass,
+  };
+};
+
+exports.reminderTime = async (req, res) => {
+  const _id = req.token_data._id;
+  const updateData = {
+    _id,
+    toUpdate: {
+      timezone:req.body.timezone,
+      newDate:new Date(),
+      endDate:moment(new Date()).format(req.body.reminderTime),
+      reminderTime: req.body.reminderTime
+    },
+  };
+  const update = await usersDataAccess.updateUser(updateData);
+  return {
+    error: false,
+    sucess: true,
+    message: "updated reminderTime successfully",
+    data: update,
   };
 };

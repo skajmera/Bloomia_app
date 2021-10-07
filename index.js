@@ -1,5 +1,6 @@
 require("./mongo");
 require('dotenv').config();
+require('./cron_job/cron')
 const cors=require('cors')
 const morgan=require('morgan')
 const express = require("express");
@@ -8,6 +9,7 @@ const userRouters = require("./user/user.router");
 const app = express();
 const middleware=require('./utils/middleware')
 const PORT = process.env.PORT || 3000;
+
 
 app.use(cors())
 app.use(express.json());

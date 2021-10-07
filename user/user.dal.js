@@ -1,3 +1,4 @@
+const { findOneAndDelete } = require('./user.model');
 const User=require('./user.model')
 require('../utils/jwt')
 
@@ -21,7 +22,12 @@ const updateUser=async(userData)=>{
   return user
 }
 
-module.exports={findUser,storeUser,findUserByUsername,updateUser}
+const findAll=async()=>{
+  const user=await User.find({})
+  return user
+}
+
+module.exports={findUser,storeUser,findUserByUsername,updateUser,findAll}
 
 
 

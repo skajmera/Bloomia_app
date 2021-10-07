@@ -50,9 +50,17 @@ router.put('/resetPassword',async(req,res)=>{
     return res.send(result)
 })
 
+router.put('/reminder',authenticateToken,async(req,res)=>{
+    const result = await userController.reminderTime(req);
+    return res.send(result)
+})
+
 router.get('/getUserId/:_id',userController.getId)
 
-router.get('/getAll',userController.getAllusers)
+router.get('/getAll',async(req,res)=>{
+    const result = await userController.getAllusers(req);
+    return res.send(result)
+})
 
 module.exports = router;
 

@@ -246,7 +246,6 @@ exports.reminderTime = async (req, res) => {
       endDate: momen()
         .tz(req.body.timezone)
         .format(`YYYY-MM-DD ${req.body.reminderTime}:ss ZZ`),
-
       reminderTime: req.body.reminderTime,
     },
   };

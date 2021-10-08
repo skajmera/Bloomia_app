@@ -12,7 +12,7 @@ cron.schedule(
     console.log("running a task every minute");
     const data = await usersDataAccess.findAll();
     for (i of data) {
-      console.log(i.timezone, i.endDate);
+      console.log(i.timezone, i.endDate, momen().tz(`${i.timezone}`).format("YYYY-MM-DD HH:mm:ss ZZ"));
       if (count !== 1) {
         if (
           momen().tz(`${i.timezone}`).format("YYYY-MM-DD HH:mm:ss ZZ") ===

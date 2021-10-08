@@ -1,6 +1,7 @@
 const usersDataAccess = require("./user.dal");
 const bcrypt = require("bcrypt");
-const moment=require('moment')
+const moment = require("moment");
+const momen = require("moment-timezone");
 require("dotenv").config();
 const ExpressError = require("../utils/errorGenerator");
 const { generateAccessToken } = require("../utils/jwt");
@@ -38,7 +39,7 @@ exports.createUser = async (req) => {
     from: process.env.email,
     to: storedUser.email,
     subject: "Sending email using node.js",
-    text:`https://bloomia.herokuapp.com/users/getUserId/${storedUser._id}`,
+    text: `https://bloomia.herokuapp.com/users/getUserId/${storedUser._id}`,
   };
   myFunction(otpSend);
   return {
@@ -143,12 +144,12 @@ exports.uploadImage = async (req, res) => {
 };
 
 exports.getAllusers = async (req, res) => {
-    const users = await usersDataAccess.findAll();
-    return(users);
+  const users = await usersDataAccess.findAll();
+  return users;
 };
 
 exports.getId = async (req, res) => {
-    res.send(req.params._id);
+  res.send(req.params._id);
 };
 
 exports.forgotPassword = async (req, res) => {
@@ -166,7 +167,7 @@ exports.forgotPassword = async (req, res) => {
     from: process.env.email,
     to: userData.email,
     subject: "Sending email using node.js",
-    text:`https://bloomia.herokuapp.com/users/getUserId/${userData._id}`,
+    text: `https://bloomia.herokuapp.com/users/getUserId/${userData._id}`,
   };
   myFunction(otpSend);
   const newPassword = bcrypt.hashSync(req.body.newPassword, 10);
@@ -182,7 +183,7 @@ exports.forgotPassword = async (req, res) => {
     error: false,
     sucess: true,
     message: "forgot password successfully generate",
-    data: userData
+    data: userData,
   };
 };
 
@@ -211,7 +212,7 @@ exports.verifyEmail = async (req, res) => {
 };
 
 exports.resetPassword = async (req, res) => {
-  const _id = req.body._id
+  const _id = req.body._id;
   const userData = await usersDataAccess.findUser({
     _id: _id,
   });
@@ -240,10 +241,13 @@ exports.reminderTime = async (req, res) => {
   const updateData = {
     _id,
     toUpdate: {
-      timezone:req.body.timezone,
-      newDate:new Date(),
-      endDate:moment(new Date()).format(req.body.reminderTime),
-      reminderTime: req.body.reminderTime
+      timezone: req.body.timezone,
+      newDate: momen().tz(req.body.timezone).format("YYYY-MM-DD HH:mm:ss ZZ"),
+      endDate: momen()
+        .tz(req.body.timezone)
+        .format(`YYYY-MM-DD ${req.body.reminderTime}:ss ZZ`),
+
+      reminderTime: req.body.reminderTime,
     },
   };
   const update = await usersDataAccess.updateUser(updateData);

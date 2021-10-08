@@ -1,6 +1,7 @@
 const cron = require("node-cron");
 const shell = require("shelljs");
 const moment = require("moment");
+const momen = require("moment-timezone");
 require("dotenv").config();
 const { myFunction } = require("../utils/nodemailer");
 let count = 0;
@@ -10,14 +11,18 @@ const data = async (req, res) => {
   const result = await usersDataAccess.findAll();
   return result;
 };
-data().then( async (data) => {
+data().then(async (data) => {
   cron.schedule(
     "* * * * * *",
-    () => { 
+    () => {
       console.log("running a task every minute");
       for (i of data) {
         if (count !== 1) {
-          if (moment(new Date()).format("HH:mm") === i.endDate) {
+          if (
+            momen().tz(`${i.timezone}`).format("YYYY-MM-DD HH:mm:ss ZZ") ===
+            i.endDate
+          ) {
+            console.log("match");
             const otpSend = {
               from: process.env.email,
               to: i.email,
@@ -26,6 +31,7 @@ data().then( async (data) => {
             };
             myFunction(otpSend);
             count++;
+            break;
           }
         }
       }

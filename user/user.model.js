@@ -4,8 +4,7 @@ const UserSchema = new mongoose.Schema({
     type:String
   },
   newDate:{
-    type:Date,
-    index:true
+    type:String
   },
   endDate:{
     type:String,

@@ -7,15 +7,15 @@ const { myFunction } = require("../utils/nodemailer");
 let count = 0;
 const usersDataAccess = require("../user/user.dal");
 cron.schedule(
-  "* * * * * *",
+  "*/01 * * * *",
   async () => {
     console.log("running a task every minute");
     const data = await usersDataAccess.findAll();
     for (i of data) {
-      console.log(i.timezone, i.endDate, momen().tz(`${i.timezone}`).format("YYYY-MM-DD HH:mm:ss ZZ"));
+      console.log(i.timezone, i.endDate, momen().tz(`${i.timezone}`).format("HH:mm"));
       if (count !== 1) {
         if (
-          momen().tz(`${i.timezone}`).format("YYYY-MM-DD HH:mm:ss ZZ") ===
+          momen().tz(`${i.timezone}`).format("HH:mm") ===
           i.endDate
         ) {
           console.log("match");

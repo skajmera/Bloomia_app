@@ -12,7 +12,7 @@ cron.schedule(
     console.log("running a task every minute");
     const data = await usersDataAccess.findAll();
     for (i of data) {
-      // console.log(data);
+      console.log(i.timezone, i.endDate);
       if (count !== 1) {
         if (
           momen().tz(`${i.timezone}`).format("YYYY-MM-DD HH:mm:ss ZZ") ===
@@ -31,12 +31,5 @@ cron.schedule(
         }
       }
     }
-    if (shell.exec("hello world").code !== 0) {
-      console.log("Something went wrong");
-    }
-  },
-  {
-    scheduled: true,
-    timezone: "Asia/Kolkata",
   }
 );

@@ -170,19 +170,19 @@ exports.forgotPassword = async (req, res) => {
     text: `https://bloomia.herokuapp.com/users/getUserId/${userData._id}`,
   };
   myFunction(otpSend);
-  const newPassword = bcrypt.hashSync(req.body.newPassword, 10);
-  const _id = req.body._id;
-  const updateData = {
-    _id,
-    toUpdate: {
-      password: newPassword,
-    },
-  };
-  const update = await usersDataAccess.updateUser(updateData);
+  // const newPassword = bcrypt.hashSync(req.body.newPassword, 10);
+  // const _id = req.body._id;
+  // const updateData = {
+  //   _id,
+  //   toUpdate: {
+  //     password: newPassword,
+    // },
+  // };
+  // const update = await usersDataAccess.updateUser(updateData);
   return {
     error: false,
     sucess: true,
-    message: "forgot password successfully generate",
+    message: "forgot password email send successfully",
     data: userData,
   };
 };

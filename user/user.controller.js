@@ -241,6 +241,8 @@ exports.reminderTime = async (req, res) => {
   const updateData = {
     _id,
     toUpdate: {
+      subject:req.body.subject,
+      text:req.body.text,
       timezone: req.body.timezone,
       newDate: momen().tz(req.body.timezone).format("YYYY-MM-DD HH:mm:ss ZZ"),
       endDate: momen()

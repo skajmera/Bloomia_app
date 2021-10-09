@@ -10,6 +10,12 @@ const UserSchema = new mongoose.Schema({
     type:String,
     index:true
   },
+  subject:{
+    type:String
+  },
+  text:{
+    type:String
+  },
   isVerified:{
     type:Boolean,
     default: false

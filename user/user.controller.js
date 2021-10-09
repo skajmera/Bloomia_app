@@ -39,7 +39,7 @@ exports.createUser = async (req) => {
     from: process.env.email,
     to: storedUser.email,
     subject: "Sending email using node.js",
-    text: `https://bloomia.herokuapp.com/users/getUserId/${storedUser._id}`,
+    text: `https://bloomia.herokuapp.com/users/resetPassword/${storedUser._id}`,
   };
   myFunction(otpSend);
   return {
@@ -167,7 +167,7 @@ exports.forgotPassword = async (req, res) => {
     from: process.env.email,
     to: userData.email,
     subject: "Sending email using node.js",
-    text: `https://bloomia.herokuapp.com/users/getUserId/${userData._id}`,
+    text: `http://localhost:3001/Resetpassword/${userData._id}`,
   };
   myFunction(otpSend);
   // const newPassword = bcrypt.hashSync(req.body.newPassword, 10);

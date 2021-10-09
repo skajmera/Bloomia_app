@@ -55,7 +55,7 @@ router.put('/reminder',authenticateToken,async(req,res)=>{
     return res.send(result)
 })
 
-router.get('/getUserId/:_id',userController.getId)
+router.get('/resetPassword/:_id',userController.getId)
 
 router.get('/getAll',async(req,res)=>{
     const result = await userController.getAllusers(req);

@@ -1,6 +1,6 @@
 const cron = require("node-cron");
-const shell = require("shelljs");
-const moment = require("moment");
+// const shell = require("shelljs");
+// const moment = require("moment");
 const momen = require("moment-timezone");
 require("dotenv").config();
 const { myFunction } = require("../utils/nodemailer");

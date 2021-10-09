@@ -1,13 +1,13 @@
 const usersDataAccess = require("./user.dal");
 const bcrypt = require("bcrypt");
-const moment = require("moment");
+// const moment = require("moment");
 const momen = require("moment-timezone");
 require("dotenv").config();
 const ExpressError = require("../utils/errorGenerator");
 const { generateAccessToken } = require("../utils/jwt");
-const userModel = require("./user.model");
+// const userModel = require("./user.model");
 const { myFunction } = require("../utils/nodemailer");
-const { memoryStorage } = require("multer");
+// const { memoryStorage } = require("multer");
 
 exports.getUser = async (req) => {
   const _id = req.token_data._id;
@@ -21,8 +21,8 @@ exports.getUser = async (req) => {
 };
 
 exports.createUser = async (req) => {
-  const { email, password, first_name, last_name, number } = req.body;
-  if (!password || !email || !first_name || !last_name || !number) {
+  const { email, password, first_name, last_name, contact } = req.body;
+  if (!password || !email || !first_name || !last_name || !contact) {
     throw new ExpressError(401, "Bad request");
   }
   const passwordHash = bcrypt.hashSync(req.body.password, 10);

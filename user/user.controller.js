@@ -216,10 +216,10 @@ exports.resetPassword = async (req, res) => {
   const userData = await usersDataAccess.findUser({
     _id: _id,
   });
-  const match = bcrypt.compareSync(req.body.password, userData.password);
-  if (!match) {
-    return new ExpressError(403, "Your Old Password is Invalid");
-  }
+  // const match = bcrypt.compareSync(req.body.password, userData.password);
+  // if (!match) {
+  //   return new ExpressError(403, "Your Old Password is Invalid");
+  // }
   const password = bcrypt.hashSync(req.body.newPassword, 10);
   const updateData = {
     _id,

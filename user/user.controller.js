@@ -224,9 +224,9 @@ exports.resetPassword = async (req, res) => {
   if ( !_id || !newPassword) {
     throw new ExpressError(401, "plz enter the  _id or newPassword");
   }
-  const userData = await usersDataAccess.findUser({
-    _id: _id,
-  });
+  // const userData = await usersDataAccess.findUser({
+  //   _id: _id,
+  // });
   // const match = bcrypt.compareSync(req.body.password, userData.password);
   // if (!match) {
   //   return new ExpressError(403, "Your Old Password is Invalid");

@@ -14,7 +14,7 @@ cron.schedule(
     for (i of data) {
       console.log(i.timezone, i.endDate, momen().tz(`${i.timezone}`).format("HH:mm"));
       console.log("count: ",count);
-      if (count !== 1) {
+      // if (count !== 1) {
         if (
           momen().tz(`${i.timezone}`).format("HH:mm") ===
           i.endDate
@@ -27,9 +27,9 @@ cron.schedule(
             text: `do exercise.`,
           };
           myFunction(otpSend);
-          count++;
+          // count++;
           break;
-        }
+        // }
       }
     }
   }

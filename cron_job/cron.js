@@ -13,6 +13,7 @@ cron.schedule(
     const data = await usersDataAccess.findAll();
     for (i of data) {
       console.log(i.timezone, i.endDate, momen().tz(`${i.timezone}`).format("HH:mm"));
+      console.log("count: ",count);
       if (count !== 1) {
         if (
           momen().tz(`${i.timezone}`).format("HH:mm") ===
@@ -23,7 +24,7 @@ cron.schedule(
             from: process.env.email,
             to: i.email,
             subject: "Sending email using node.js",
-            text: `Hello User doing your work? your time is start.`,
+            text: `do exercise.`,
           };
           myFunction(otpSend);
           count++;

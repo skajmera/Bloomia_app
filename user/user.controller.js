@@ -27,6 +27,7 @@ exports.createUser = async (req) => {
   }
   const passwordHash = bcrypt.hashSync(req.body.password, 10);
   const data = {
+    profileImage:"uploads/1633780506772defaultImage.jpg",
     isVerified: false,
     first_name: req.body.first_name,
     last_name: req.body.last_name,
@@ -274,3 +275,6 @@ exports.reminderTime = async (req, res) => {
     data: update,
   };
 };
+
+
+

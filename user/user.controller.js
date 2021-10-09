@@ -99,14 +99,18 @@ exports.updateUser = async (req, res) => {
 
 exports.updatePassword = async (req, res) => {
   const _id = req.token_data._id;
+  const {password,newPassword}= req.body
+  if ( !password || !newPassword) {
+    throw new ExpressError(401, "plz enter the  password or newPassword");
+  }
   const userData = await usersDataAccess.findUser({
     _id: _id,
   });
-  const match = bcrypt.compareSync(req.body.password, userData.password);
+  const match = bcrypt.compareSync(password, userData.password);
   if (!match) {
     return new ExpressError(403, "Your Old Password is Invalid");
   }
-  const password = bcrypt.hashSync(req.body.newPassword, 10);
+  const password = bcrypt.hashSync(newPassword, 10);
   const updateData = {
     _id,
     toUpdate: {
@@ -188,8 +192,12 @@ exports.forgotPassword = async (req, res) => {
 };
 
 exports.verifyEmail = async (req, res) => {
+  const {_id}= req.body
+  if ( !_id) {
+    throw new ExpressError(401, "plz enter the  _id");
+  }
   const userData = await usersDataAccess.findUser({
-    _id: req.body._id,
+    _id: _id,
   });
   if (!userData) {
     return new ExpressError(404, "_id does not exists");
@@ -212,7 +220,10 @@ exports.verifyEmail = async (req, res) => {
 };
 
 exports.resetPassword = async (req, res) => {
-  const _id = req.body._id;
+  const {_id, newPassword}= req.body
+  if ( !_id || !newPassword) {
+    throw new ExpressError(401, "plz enter the  _id or newPassword");
+  }
   const userData = await usersDataAccess.findUser({
     _id: _id,
   });
@@ -220,7 +231,7 @@ exports.resetPassword = async (req, res) => {
   // if (!match) {
   //   return new ExpressError(403, "Your Old Password is Invalid");
   // }
-  const password = bcrypt.hashSync(req.body.newPassword, 10);
+  const password = bcrypt.hashSync(newPassword, 10);
   const updateData = {
     _id,
     toUpdate: {
@@ -237,6 +248,10 @@ exports.resetPassword = async (req, res) => {
 };
 
 exports.reminderTime = async (req, res) => {
+  const { subject,text,timezone,reminderTime } = req.body;
+  if ( !subject || !text || !timezone || !reminderTime) {
+    throw new ExpressError(401, "Bad request");
+  }
   const _id = req.token_data._id;
   const updateData = {
     _id,

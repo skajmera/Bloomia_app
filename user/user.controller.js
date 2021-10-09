@@ -110,11 +110,11 @@ exports.updatePassword = async (req, res) => {
   if (!match) {
     return new ExpressError(403, "Your Old Password is Invalid");
   }
-  const password = bcrypt.hashSync(newPassword, 10);
+  const passwordd = bcrypt.hashSync(newPassword, 10);
   const updateData = {
     _id,
     toUpdate: {
-      password: password,
+      password: passwordd,
     },
   };
   const updatePass = await usersDataAccess.updateUser(updateData);
@@ -202,9 +202,9 @@ exports.verifyEmail = async (req, res) => {
   if (!userData) {
     return new ExpressError(404, "_id does not exists");
   }
-  const _id = userData._id;
+  const _idd = userData._id;
   const updateData = {
-    _id,
+    _idd,
     toUpdate: {
       isVerified: true,
     },

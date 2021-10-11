@@ -11,13 +11,12 @@ router.post('/signup', async (req, res) => {
 
 router.get('/getUser',authenticateToken,async (request, response) => {
     const result = await userController.getUser(request);
-    return response.json({ result });
+    return response.json(result);
   });
 
 router.post('/login',async(req,res)=>{
     const result=await userController.loginUser(req);
-    // res.cookie("token",result.token);
-    return res.json({result})
+    return res.json(result)
 })
 
 router.put('/updateProfile',authenticateToken,async(req,res)=>{

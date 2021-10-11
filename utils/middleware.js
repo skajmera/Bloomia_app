@@ -3,9 +3,11 @@ const unknownEndpoint = (request, response) => {
   };
 
   const errorHandler = (error, request, response, next) => {
-      console.log(error);
     if (error.status) {
       return response.status(error.status).send({error: true, message: error.message });
+    }
+    if (error.name === 'CastError') {
+      return response.json({error:error.name  ,message: `Invalid Data in ${error.path}`});
     }
     if (error.message) {
       return response.status(400).json({ error: error.message });

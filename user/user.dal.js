@@ -1,4 +1,3 @@
-// const { findOneAndDelete } = require('./user.model');
 const User=require('./user.model')
 require('../utils/jwt')
 

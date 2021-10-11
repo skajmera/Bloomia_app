@@ -1,10 +1,7 @@
 const cron = require("node-cron");
-// const shell = require("shelljs");
-// const moment = require("moment");
 const momen = require("moment-timezone");
 require("dotenv").config();
 const { myFunction } = require("../utils/nodemailer");
-// let count = 0;
 const usersDataAccess = require("../user/user.dal");
 cron.schedule(
   "*/01 * * * *",
@@ -13,8 +10,6 @@ cron.schedule(
     const data = await usersDataAccess.findAll();
     for (i of data) {
       console.log(i.timezone, i.endDate, momen().tz(`${i.timezone}`).format("HH:mm"));
-      // console.log("count: ",count);
-      // if (count !== 1) {
         if (
           momen().tz(`${i.timezone}`).format("HH:mm") ===
           i.endDate
@@ -27,9 +22,7 @@ cron.schedule(
             text: i.text,
           };
           myFunction(otpSend);
-          // count++;
           break;
-        // }
       }
     }
   }

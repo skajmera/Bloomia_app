@@ -1,13 +1,10 @@
 const usersDataAccess = require("./user.dal");
 const bcrypt = require("bcrypt");
-// const moment = require("moment");
 const momen = require("moment-timezone");
 require("dotenv").config();
 const ExpressError = require("../utils/errorGenerator");
 const { generateAccessToken } = require("../utils/jwt");
-// const userModel = require("./user.model");
 const { myFunction } = require("../utils/nodemailer");
-// const { memoryStorage } = require("multer");
 
 exports.getUser = async (req) => {
   const _id = req.token_data._id;
@@ -128,11 +125,13 @@ exports.updatePassword = async (req, res) => {
 };
 
 exports.uploadImage = async (req, res) => {
-  if (!req.file) {
-    res.send(new ExpressError(400, "Bad request"));
-  }
   const _id = req.token_data._id;
-  const image = "/uploads/" + req.file.filename;
+  let image;
+  if(!req.file){
+    image="uploads/1633780506772defaultImage.jpg"
+  }else{
+    image = "/uploads/" + req.file.filename;
+  }
   const updateImage = {
     _id,
     toUpdate: {
@@ -175,15 +174,6 @@ exports.forgotPassword = async (req, res) => {
     text: `http://localhost:3001/Resetpassword/${userData._id}`,
   };
   myFunction(otpSend);
-  // const newPassword = bcrypt.hashSync(req.body.newPassword, 10);
-  // const _id = req.body._id;
-  // const updateData = {
-  //   _id,
-  //   toUpdate: {
-  //     password: newPassword,
-    // },
-  // };
-  // const update = await usersDataAccess.updateUser(updateData);
   return {
     error: false,
     sucess: true,
@@ -197,15 +187,8 @@ exports.verifyEmail = async (req, res) => {
   if ( !_id) {
     throw new ExpressError(401, "plz enter the  _id");
   }
-  const userData = await usersDataAccess.findUser({
-    _id: _id,
-  });
-  if (!userData) {
-    return new ExpressError(404, "_id does not exists");
-  }
-  const _idd = userData._id;
   const updateData = {
-    _idd,
+    _id,
     toUpdate: {
       isVerified: true,
     },
@@ -215,7 +198,6 @@ exports.verifyEmail = async (req, res) => {
     error: false,
     sucess: true,
     message: "email is verified successfully",
-    data: userData,
     verify: update,
   };
 };
@@ -225,13 +207,6 @@ exports.resetPassword = async (req, res) => {
   if ( !_id || !newPassword) {
     throw new ExpressError(401, "plz enter the  _id or newPassword");
   }
-  // const userData = await usersDataAccess.findUser({
-  //   _id: _id,
-  // });
-  // const match = bcrypt.compareSync(req.body.password, userData.password);
-  // if (!match) {
-  //   return new ExpressError(403, "Your Old Password is Invalid");
-  // }
   const password = bcrypt.hashSync(newPassword, 10);
   const updateData = {
     _id,

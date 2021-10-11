@@ -24,7 +24,7 @@ exports.createUser = async (req) => {
   }
   const passwordHash = bcrypt.hashSync(req.body.password, 10);
   const data = {
-    profileImage:"uploads/1633780506772defaultImage.jpg",
+    profileImage: "uploads/1633780506772defaultImage.jpg",
     isVerified: false,
     first_name: req.body.first_name,
     last_name: req.body.last_name,
@@ -97,8 +97,8 @@ exports.updateUser = async (req, res) => {
 
 exports.updatePassword = async (req, res) => {
   const _id = req.token_data._id;
-  const {password,newPassword}= req.body
-  if ( !password || !newPassword) {
+  const { password, newPassword } = req.body;
+  if (!password || !newPassword) {
     throw new ExpressError(401, "plz enter the  password or newPassword");
   }
   const userData = await usersDataAccess.findUser({
@@ -127,9 +127,9 @@ exports.updatePassword = async (req, res) => {
 exports.uploadImage = async (req, res) => {
   const _id = req.token_data._id;
   let image;
-  if(!req.file){
-    image="uploads/1633780506772defaultImage.jpg"
-  }else{
+  if (!req.file) {
+    image = "uploads/1633780506772defaultImage.jpg";
+  } else {
     image = "/uploads/" + req.file.filename;
   }
   const updateImage = {
@@ -183,8 +183,8 @@ exports.forgotPassword = async (req, res) => {
 };
 
 exports.verifyEmail = async (req, res) => {
-  const {_id}= req.body
-  if ( !_id) {
+  const { _id } = req.body;
+  if (!_id) {
     throw new ExpressError(401, "plz enter the  _id");
   }
   const updateData = {
@@ -203,8 +203,8 @@ exports.verifyEmail = async (req, res) => {
 };
 
 exports.resetPassword = async (req, res) => {
-  const {_id, newPassword}= req.body
-  if ( !_id || !newPassword) {
+  const { _id, newPassword } = req.body;
+  if (!_id || !newPassword) {
     throw new ExpressError(401, "plz enter the  _id or newPassword");
   }
   const password = bcrypt.hashSync(newPassword, 10);
@@ -224,21 +224,19 @@ exports.resetPassword = async (req, res) => {
 };
 
 exports.reminderTime = async (req, res) => {
-  const { subject,text,timezone,reminderTime } = req.body;
-  if ( !subject || !text || !timezone || !reminderTime) {
+  const { subject, text, timezone, reminderTime } = req.body;
+  if (!subject || !text || !timezone || !reminderTime) {
     throw new ExpressError(401, "Bad request");
   }
   const _id = req.token_data._id;
   const updateData = {
     _id,
     toUpdate: {
-      subject:req.body.subject,
-      text:req.body.text,
+      subject: req.body.subject,
+      text: req.body.text,
       timezone: req.body.timezone,
       newDate: momen().tz(req.body.timezone).format("YYYY-MM-DD HH:mm:ss ZZ"),
-      endDate: momen()
-        .tz(req.body.timezone)
-        .format(`${req.body.reminderTime}`),
+      endDate: momen().tz(req.body.timezone).format(`${req.body.reminderTime}`),
       reminderTime: req.body.reminderTime,
     },
   };
@@ -250,6 +248,3 @@ exports.reminderTime = async (req, res) => {
     data: update,
   };
 };
-
-
-

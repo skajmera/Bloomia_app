@@ -9,11 +9,13 @@ passport.serializeUser(function(user, done) {
 passport.deserializeUser(function(user, done) {
         done(null, user);
 });
-
+// ||process.env.clientID
+// process.env.clientSecret,
+// process.env.callbackURL,
 passport.use(new GoogleStrategy({
-        clientID:process.env.clientID,
-        clientSecret:process.env.clientSecret,
-        callbackURL:process.env.callbackURL,
+        clientID:"361344985500-l946e4ra5nv3fgf66sgi26msg0euo2no.apps.googleusercontent.com",
+        clientSecret:"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",
+        callbackURL:"/auth/google/callback",
         passReqToCallback   : true
     },
     function(request, accessToken, refreshToken, profile, done) {

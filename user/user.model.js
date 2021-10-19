@@ -23,11 +23,6 @@ const UserSchema = new mongoose.Schema({
   profileImage: {
     type: String,
   },
-  mailSent: {
-    type: Boolean,
-    default: false
-  },
-
   timezone:{
     type:String
   },

@@ -149,7 +149,12 @@ exports.uploadImage = async (req, res) => {
 
 exports.getAllusers = async (req, res) => {
   const users = await usersDataAccess.findAll();
-  return users;
+  return {
+    error: false,
+    sucess: true,
+    message: "Get all users Sucessfully",
+    data: users,
+  };
 };
 
 exports.getId = async (req, res) => {

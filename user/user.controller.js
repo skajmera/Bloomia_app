@@ -253,3 +253,47 @@ exports.reminderTime = async (req, res) => {
     data: update,
   };
 };
+
+const loginU = async (email) => {
+  const data = await usersDataAccess.findUserByUsername({
+    email,
+  });
+  const token = generateAccessToken({ _id: data._id });
+  return {
+    error: false,
+    sucess: true,
+    message: "login google oauth successfully",
+    data: data,
+    token,
+  };
+};
+
+exports.success = async (req, res) => {
+  try {
+    const oauth = req.user;
+    const userData = await usersDataAccess.findUserByUsername({
+      email: oauth.email,
+    });
+    if (!userData) {
+      const data = {
+        profileImage: "uploads/1633780506772defaultImage.jpg",
+        isVerified: false,
+        first_name: oauth.given_name,
+        last_name: oauth.family_name,
+        email: oauth.email,
+      };
+      await usersDataAccess.storeUser(data);
+    }
+    return loginU(oauth.email);
+  } catch (err) {
+    return new ExpressError(500, err.message);
+  }
+};
+
+// const deAll=async()=>{
+//     // const user=await User.remove({})
+//     const data = await usersDataAccess.deleteAll();
+//     console.log(data)
+//   }
+// deAll()
+///

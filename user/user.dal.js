@@ -26,7 +26,12 @@ const findAll=async()=>{
   return user
 }
 
-module.exports={findUser,storeUser,findUserByUsername,updateUser,findAll}
+const deleteAll=async()=>{
+  const user=await User.remove({})
+  return user
+}
+
+module.exports={findUser,storeUser,findUserByUsername,updateUser,findAll,deleteAll}
 
 
 

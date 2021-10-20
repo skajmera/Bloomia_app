@@ -11,14 +11,12 @@ require('./utils/auth');
 
 require('express-async-errors')
 const userRouters = require("./user/user.router");
-const OAuth=require('./utils/index')
 const app = express();
 
 app.use(cookieSession({
   name: 'google-auth-session',
   keys: ['key1', 'key2']
 }))
-
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -33,7 +31,6 @@ app.use(morgan('dev'))
 app.use(express.static("public"));
 app.use(express.urlencoded({ extended: false }));
 app.use("/users", userRouters);
-app.use('/',OAuth);
 app.use(middleware.unknownEndpoint)
 app.use(middleware.errorHandler)
 

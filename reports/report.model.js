@@ -1,14 +1,14 @@
 const mongoose = require("mongoose");
 const UserSchema = new mongoose.Schema({
-  userId:{
-    type:String
+  userId: {
+    type: String,
   },
-  setTime:{
-    type:Number
+  setTime: {
+    type: Number,
   },
-  setCount:{
-      type:Number
-  }
+  setCount: {
+    type: Number,
+  },
 });
 
 const Report = mongoose.model("reportData", UserSchema);

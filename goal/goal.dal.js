@@ -10,4 +10,5 @@ const findUser = async (data) => {
   const user = await Goal.findById(data);
   return user;
 };
+
 module.exports = { storeUser, findUser };

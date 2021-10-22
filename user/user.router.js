@@ -1,7 +1,7 @@
 const express = require("express");
 const passport = require("passport");
 const upload = require("../middleware/multer");
-const { authenticateToken} = require("../utils/jwt");
+const { authenticateToken } = require("../utils/jwt");
 const router = express.Router();
 const userController = require("../user/user.controller");
 router.post("/signup", async (req, res) => {

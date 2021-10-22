@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-require('dotenv').config();
+require("dotenv").config();
 const url = process.env.url;
 mongoose
   .connect(url, {
@@ -8,5 +8,5 @@ mongoose
   })
   .then(() => console.log("connected to the database"))
   .catch((err) => {
-    res.send(err)
+    res.send(err);
   });

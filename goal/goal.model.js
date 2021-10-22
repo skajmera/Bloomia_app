@@ -1,14 +1,14 @@
 const mongoose = require("mongoose");
 const UserSchema = new mongoose.Schema({
-  setType:{
-    type:String
+  setType: {
+    type: String,
   },
-  userId:{
-    type:String
+  userId: {
+    type: String,
   },
-  set:{
-      type:Number
-  }
+  set: {
+    type: Number,
+  },
 });
 
 const Goal = mongoose.model("adminData", UserSchema);

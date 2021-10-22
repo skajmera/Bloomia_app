@@ -1,30 +1,30 @@
 const mongoose = require("mongoose");
 const UserSchema = new mongoose.Schema({
-  reminderTime:{
-    type:String
+  reminderTime: {
+    type: String,
   },
-  newDate:{
-    type:String
+  newDate: {
+    type: String,
   },
-  endDate:{
-    type:String,
-    index:true
+  endDate: {
+    type: String,
+    index: true,
   },
-  subject:{
-    type:String
+  subject: {
+    type: String,
   },
-  text:{
-    type:String
+  text: {
+    type: String,
   },
-  isVerified:{
-    type:Boolean,
-    default: false
+  isVerified: {
+    type: Boolean,
+    default: false,
   },
   profileImage: {
     type: String,
   },
-  timezone:{
-    type:String
+  timezone: {
+    type: String,
   },
 
   first_name: {
@@ -40,7 +40,7 @@ const UserSchema = new mongoose.Schema({
   email: {
     type: String,
     required: true,
-    unique:true
+    unique: true,
   },
   password: {
     type: String,

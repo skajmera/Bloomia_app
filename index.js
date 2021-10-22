@@ -11,6 +11,8 @@ require('./utils/auth');
 
 require('express-async-errors')
 const userRouters = require("./user/user.router");
+const goalRouters=require('./goal/goal.router')
+const reportRouters=require('./reports/report.router')
 const app = express();
 
 app.use(cookieSession({
@@ -31,6 +33,8 @@ app.use(morgan('dev'))
 app.use(express.static("public"));
 app.use(express.urlencoded({ extended: false }));
 app.use("/users", userRouters);
+app.use('/goal',goalRouters);
+app.use('/report',reportRouters)
 app.use(middleware.unknownEndpoint)
 app.use(middleware.errorHandler)
 

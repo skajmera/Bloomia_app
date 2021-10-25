@@ -11,4 +11,14 @@ const findUser = async (data) => {
   return user;
 };
 
-module.exports = { storeUser, findUser };
+const updateUser = async (userData) => {
+  const user = await Goal.findByIdAndUpdate(
+    userData._id,
+    { $set: userData.toUpdate },
+    { new: true }
+  );
+  return user;
+};
+
+
+module.exports = { storeUser, findUser,updateUser };

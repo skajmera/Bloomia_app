@@ -9,7 +9,14 @@ const UserSchema = new mongoose.Schema({
   setCount: {
     type: Number,
   },
-});
+  creatTime:{
+    type:String
+  },
+  isoDate:{
+    type:String
+  }
+},
+{timestamps:true} );
 
 const Report = mongoose.model("reportData", UserSchema);
 module.exports = Report;

@@ -5,6 +5,7 @@ const momen = require("moment-timezone");
 
 exports.updateTime = async (req, res) => {
   const creatTime = momen().tz("Asia/Kolkata").format("YYYY-MM-DD");
+  console.log(creatTime);
   const _id = req.token_data._id;
   const { setTime, setCount } = req.body;
   if ((!setTime, !setCount)) {
@@ -68,14 +69,20 @@ exports.getReportDate = async (req) => {
 };
 
 exports.getReportMonth = async (req) => {
-  const m = momen().tz("Asia/Kolkata").format("MM");
+  let m = momen().tz("Asia/Kolkata").format("MM");
+  let year= momen().tz("Asia/Kolkata").format("YYYY");
   let n = req.body.monthNumber;
+  if(n>m){
+   n=n-m
+   m=12
+   year--
+  }
   let month = m - n;
   if (month < 10) {
     month = "0" + month;
   }
   const date = momen().tz("Asia/Kolkata").format("YYYY-MM-DD");
-  let changeMonth = momen().tz("Asia/Kolkata").format(`YYYY-${month}-DD`);
+  let changeMonth = momen().tz("Asia/Kolkata").format(`${year}-${month}-DD`);
   const users = await usersDataAccess.findUser({
     isoDate: {
       $gte: `${changeMonth}T00:00:00Z`,
@@ -84,11 +91,34 @@ exports.getReportMonth = async (req) => {
   });
   if (!users[0]) {
     throw new ExpressError(401, " data is not found ");
+  }////
+  let list1=[]
+  let list2=[]
+  let countSet=0
+  let countTime=0
+  let data={"setCount":" ","setTime":" "}
+  for( i of users){
+    if(list2.includes(momen(new Date(i.creatTime)).format("MMM"))){
+      countSet=countSet+i.setCount
+      countTime=countTime+i.setTime
+    }else{countSet=i.setCount
+      countTime=i.setTime
+    }
+    list2.push(momen(new Date(i.creatTime)).format("MMM"))
+    data.setCount=countSet
+    data.setTime=countTime
+    // "month:- ":momen(new Date(i.creatTime)).format("MMM YYYY")};
+    list1.push(data)
   }
+  // list1.push(data)
   return {
     error: false,
     sucess: true,
     message: "Get report month ",
-    data: users,
+    data: list1
   };
 };
+
+// var startDate = momen(new Date()).utcOffset('+0700').format("YYYY-MM-DDTHH:mm:ss.SSSZ"); //req.params.startTime = 2016-09-25 00:00:00
+// console.log(startDate);
+

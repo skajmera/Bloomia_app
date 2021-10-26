@@ -13,6 +13,13 @@ router.get("/getReportMonth", authenticateToken, async (request, response) => {
   return response.json(result);
 });
 
+
+router.get("/getLastYear", authenticateToken, async (request, response) => {
+  const result = await userController.getReportYear(request);
+  return response.json(result);
+});
+
+
 router.put("/updateReport", authenticateToken, async (req, res) => {
   const result = await userController.updateTime(req);
   return res.json(result);

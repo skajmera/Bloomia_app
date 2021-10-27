@@ -172,7 +172,21 @@ exports.getReportDays = async (req) => {
       $gte: `${lastDate}T00:00:00Z`,
       $lt: `${date}T00:00:00Z`,
     },
-  });
+  })
+
+  //   "sort" : ["createdAt", -1]}, function (err, docs) {if(err){
+  //     console.log("hello");
+  //   }else{
+  //     console.log("hii");
+  //   }
+  // })
+  // ,{sort: {isoDate: -1}},(err,data)=>{
+  //   if(err){
+  //     console.log(err);
+  //   }else{
+  //     console.log(data);
+  //   }
+  // })
   if (!users[0]) {
     throw new ExpressError(401, " data is not found ");
   }
@@ -195,6 +209,16 @@ exports.getReportDays = async (req) => {
     dic[mName] = { setCount: countSet, setTime: countTime };
   }
   list1.push(dic);
+//   /////
+//   function sortFunction(a,b){  
+//     var dateA = new Date(a.isoDate).getTime();
+//     var dateB = new Date(b.isoDate).getTime();
+//     return dateA > dateB ? 1 : -1;  
+// }; 
+
+// // var array = [{id: 1, date: "Mar 12 2012 10:00:00 AM"},{id: 2, date: "Mar 28 2012 08:00:00 AM"}];
+// list1.sort(sortFunction);​
+/////
   return {
     error: false,
     sucess: true,

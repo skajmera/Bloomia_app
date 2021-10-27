@@ -39,8 +39,7 @@ exports.updateUser = async (req) => {
 
   exports.getUser = async (req) => {
     const userId = req.token_data._id
-    console.log(userId);
-    const users = await usersDataAccess.findUser({ userId: userId });
+    const users = await usersDataAccess.findUser({"userId":userId});
     return {
       error: false,
       sucess: true,
@@ -48,5 +47,3 @@ exports.updateUser = async (req) => {
       data: users,
     };
   };
-  
-  

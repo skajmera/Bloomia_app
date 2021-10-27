@@ -7,12 +7,12 @@ const storeUser = async (userToStore) => {
 };
 
 const findUser = async (data) => {
-  const user = await Goal.findById(data);
+  const user = await Goal.find(data);
   return user;
 };
 
 const updateUser = async (userData) => {
-  const user = await Goal.findByIdAndUpdate(
+  const user = await Goal.findOneAndUpdate(
     userData._id,
     { $set: userData.toUpdate },
     { new: true }

@@ -205,19 +205,26 @@ exports.getReportDays = async (req) => {
       countTime = i.setTime;
       list2.push(monthName);
     }
-    let mName = momen(new Date(i.creatTime)).format("DD/MM/YYYY");
+    let mName = momen(new Date(i.creatTime)).format("YYYY MM DD");
     dic[mName] = { setCount: countSet, setTime: countTime };
   }
   list1.push(dic);
-//   /////
-//   function sortFunction(a,b){  
-//     var dateA = new Date(a.isoDate).getTime();
-//     var dateB = new Date(b.isoDate).getTime();
-//     return dateA > dateB ? 1 : -1;  
-// }; 
+//////
+// const activities = [
+//   {  date: new Date('2019-06-28') },
+//   {  date: new Date('2019-06-10') },
+//   {  date: new Date('2019-06-22') }
+// ]
+for (i in dic){
+  console.log(i);
+  const activities = [
+  {  date: new Date(i) }
+]
+  const sortedActivities = activities.sort((a, b) => b.date - a.date)
+//   const sortedActivities = activities.slice().sort((a, b) => b.date - a.date)
 
-// // var array = [{id: 1, date: "Mar 12 2012 10:00:00 AM"},{id: 2, date: "Mar 28 2012 08:00:00 AM"}];
-// list1.sort(sortFunction);​
+  console.log(sortedActivities);
+}
 /////
   return {
     error: false,

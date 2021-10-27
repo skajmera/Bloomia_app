@@ -7,12 +7,13 @@ exports.updateUser = async (req) => {
     if (!set || !setType) {
       throw new ExpressError(401, "Bad request");
     }
-    const _id = req.token_data._id;
+    const _id ="6170022a11410ec00bfb5e95"//req.token_data._id;
     const updateData = {
       _id,
       toUpdate: {
         set:set,
-        setType:setType
+        setType:setType,
+        userId:_id
       },
     };
     const update = await usersDataAccess.updateUser(updateData);
@@ -38,8 +39,8 @@ exports.updateUser = async (req) => {
     }};
 
   exports.getUser = async (req) => {
-    const userId = req.token_data._id
-    const users = await usersDataAccess.findUser({"userId":userId});
+    const userId ="6170022a11410ec00bfb5e95"// req.token_data._id
+    const users = await usersDataAccess.findUser({userId:userId});
     return {
       error: false,
       sucess: true,

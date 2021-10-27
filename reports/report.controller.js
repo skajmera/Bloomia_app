@@ -108,7 +108,7 @@ exports.getReportMonth = async (req) => {
       list2.push(monthName);
     }
     let mName = momen(new Date(i.creatTime)).format("MMM YYYY");
-    dic[mName] = {"setCount": countSet, "setTime":countTime};
+    dic[mName] = { setCount: countSet, setTime: countTime };
   }
   list1.push(dic);
   return {
@@ -119,11 +119,10 @@ exports.getReportMonth = async (req) => {
   };
 };
 
-
 exports.getReportYear = async (req) => {
   let year = momen().tz("Asia/Kolkata").format("YYYY");
   let n = req.body.yearNumber;
-   year = year - n;
+  year = year - n;
   const date = momen().tz("Asia/Kolkata").format("YYYY-MM-DD");
   let changeMonth = momen().tz("Asia/Kolkata").format(`${year}-MM-DD`);
   const users = await usersDataAccess.findUser({
@@ -151,7 +150,7 @@ exports.getReportYear = async (req) => {
       list2.push(monthName);
     }
     let mName = momen(new Date(i.creatTime)).format("MMM YYYY");
-    dic[mName] = {"setCount": countSet, "setTime":countTime};
+    dic[mName] = { setCount: countSet, setTime: countTime };
   }
   list1.push(dic);
   return {
@@ -162,57 +161,44 @@ exports.getReportYear = async (req) => {
   };
 };
 
-
-// exports.getReportDays = async (req) => {
-//   let m = momen().tz("Asia/Kolkata").format("MM");
-//   let year = momen().tz("Asia/Kolkata").format("YYYY");
-//   let date = momen().tz("Asia/Kolkata").format("YYYY");
-//   let n = req.body.dateNumber;
-//   if (n > date) {
-//     n = n - m;
-//     m = 12;
-//     year--;
-//   }
-//   let month = m - n;
-//   if (month < 10) {
-//     month = "0" + month;
-//   }
-//   const date = momen().tz("Asia/Kolkata").format("YYYY-MM-DD");
-//   let changeMonth = momen().tz("Asia/Kolkata").format(`${year}-${month}-DD`);
-//   const users = await usersDataAccess.findUser({
-//     isoDate: {
-//       $gte: `${changeMonth}T00:00:00Z`,
-//       $lt: `${date}T00:00:00Z`,
-//     },
-//   });
-//   if (!users[0]) {
-//     throw new ExpressError(401, " data is not found ");
-//   }
-//   let list1 = [];
-//   let list2 = [];
-//   let countSet = 0;
-//   let countTime = 0;
-//   var dic = {};
-//   for (i of users) {
-//     let monthName = momen(new Date(i.creatTime)).format("MMM");
-//     if (list2.includes(monthName)) {
-//       countSet = countSet + i.setCount;
-//       countTime = countTime + i.setTime;
-//     } else {
-//       countSet = i.setCount;
-//       countTime = i.setTime;
-//       list2.push(monthName);
-//     }
-//     let mName = momen(new Date(i.creatTime)).format("MMM YYYY");
-//     dic[mName] = {"setCount": countSet, "setTime":countTime};
-//   }
-//   list1.push(dic);
-//   return {
-//     error: false,
-//     sucess: true,
-//     message: "Get report month ",
-//     data: list1,
-//   };
-// };
-
-
+exports.getReportDays = async (req) => {
+  const n = req.body.dayNumber;
+  let priorDate = new Date();
+  priorDate.setDate(priorDate.getDate() - n);
+  const lastDate = momen(priorDate).tz("Asia/Kolkata").format("YYYY-MM-DD");
+  const date = momen().tz("Asia/Kolkata").format("YYYY-MM-DD");
+  const users = await usersDataAccess.findUser({
+    isoDate: {
+      $gte: `${lastDate}T00:00:00Z`,
+      $lt: `${date}T00:00:00Z`,
+    },
+  });
+  if (!users[0]) {
+    throw new ExpressError(401, " data is not found ");
+  }
+  let list1 = [];
+  let list2 = [];
+  let countSet = 0;
+  let countTime = 0;
+  var dic = {};
+  for (i of users) {
+    let monthName = momen(new Date(i.creatTime)).format("MMM");
+    if (list2.includes(monthName)) {
+      countSet = countSet + i.setCount;
+      countTime = countTime + i.setTime;
+    } else {
+      countSet = i.setCount;
+      countTime = i.setTime;
+      list2.push(monthName);
+    }
+    let mName = momen(new Date(i.creatTime)).format("DD/MM/YYYY");
+    dic[mName] = { setCount: countSet, setTime: countTime };
+  }
+  list1.push(dic);
+  return {
+    error: false,
+    sucess: true,
+    message: "Get report month ",
+    data: list1,
+  };
+};

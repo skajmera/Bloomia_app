@@ -8,7 +8,7 @@ router.post("/goalSet", authenticateToken, async (req, res) => {
   return res.send(result);
 });
 
-router.get("/getGoalData", authenticateToken, async (request, response) => {
+router.post("/getGoalData", authenticateToken, async (request, response) => {
   const result = await userController.getUser(request);
   return response.json(result);
 });

@@ -1,8 +1,8 @@
-const usersDataAccess = require("./goal.dal");
+const goalDataAccess = require("./goal.dal");
 const ExpressError = require("../utils/errorGenerator");
 require("../utils/jwt");
 
-exports.updateUser = async (req) => {
+exports.updateGoal = async (req) => {
     const { set,setType} = req.body;
     if (!set || !setType) {
       throw new ExpressError(401, "Bad request");
@@ -15,19 +15,19 @@ exports.updateUser = async (req) => {
         setType:setType
       },
     };
-    const update = await usersDataAccess.updateUser(updateData);
+    const update = await goalDataAccess.updateGoal(updateData);
     if(!update){
       const data = {
         set:set,
         setType:setType,
         userId:_id
     };
-    const storedUser = await usersDataAccess.storeUser(data);
+    const storedGoal = await goalDataAccess.storeGoal(data);
     return {
       error: false,
       sucess: true,
       message: "user goal-set successfully",
-      data: storedUser,
+      data: storedGoal,
     };
   };
     return {
@@ -37,13 +37,13 @@ exports.updateUser = async (req) => {
       data: update,
     }};
 
-  exports.getUser = async (req) => {
+  exports.getGoal = async (req) => {
     const userId =req.token_data._id
-    const users = await usersDataAccess.findUser({userId:userId});
+    const goal = await goalDataAccess.findGoal({userId:userId});
     return {
       error: false,
       sucess: true,
       message: "Get user data",
-      data: users,
+      data: goal,
     };
   };

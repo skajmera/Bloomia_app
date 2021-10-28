@@ -1,24 +1,24 @@
 const Goal = require("./goal.model");
 require("../utils/jwt");
 
-const storeUser = async (userToStore) => {
-  const storedUser = await Goal.create(userToStore);
-  return storedUser;
+const storeGoal = async (goalToStore) => {
+  const storedGoal = await Goal.create(goalToStore);
+  return storedGoal;
 };
 
-const findUser = async (data) => {
-  const user = await Goal.find(data);
-  return user;
+const findGoal = async (data) => {
+  const goal = await Goal.find(data);
+  return goal;
 };
 
-const updateUser = async (userData) => {
-  const user = await Goal.findOneAndUpdate(
-    userData._id,
-    { $set: userData.toUpdate },
+const updateGoal = async (goalData) => {
+  const goal = await Goal.findOneAndUpdate(
+    goalData._id,
+    { $set: goalData.toUpdate },
     { new: true }
   );
-  return user;
+  return goal;
 };
 
 
-module.exports = { storeUser, findUser,updateUser };
+module.exports = { storeGoal, findGoal,updateGoal };

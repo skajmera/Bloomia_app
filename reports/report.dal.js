@@ -1,28 +1,28 @@
 const Report = require("./report.model");
 require("../utils/jwt");
 
-const storeTime = async (userToStore) => {
-  const storedUser = await Report.create(userToStore);
-  return storedUser;
+const storeTime = async (reportToStore) => {
+  const storedReports = await Report.create(reportToStore);
+  return storedReports;
 };
 
-const findUser = async (data) => {
-  const user = await Report.find(data);
-  return user;
+const findGoal = async (data) => {
+  const reports = await Report.find(data);
+  return reports;
 };
 
-const updateTime = async (userData) => {
-  const user = await Report.findOneAndUpdate(
-    { creatTime: userData.creatTime },
-    userData.toUpdate,
+const updateTime = async (reportData) => {
+  const reports = await Report.findOneAndUpdate(
+    { creatTime: reportData.creatTime },
+    reportData.toUpdate,
     { new: true }
   );
-  return user;
+  return reports;
 };
 
 const findAll = async () => {
-  const user = await Report.find({});
-  return user;
+  const reports = await Report.find({});
+  return reports;
 };
 
-module.exports = { findUser,storeTime,updateTime,findAll};
+module.exports = {findGoal,storeTime,updateTime,findAll};

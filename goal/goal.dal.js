@@ -20,5 +20,4 @@ const updateGoal = async (goalData) => {
   return goal;
 };
 
-
 module.exports = { storeGoal, findGoal,updateGoal };

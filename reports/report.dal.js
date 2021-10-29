@@ -6,7 +6,7 @@ const storeTime = async (reportToStore) => {
   return storedReports;
 };
 
-const findGoal = async (data) => {
+const findReport = async (data) => {
   const reports = await Report.find(data);
   return reports;
 };
@@ -23,6 +23,6 @@ const updateTime = async (reportData) => {
 const findAll = async () => {
   const reports = await Report.find({});
   return reports;
-};
+};                                                                                 
 
-module.exports = {findGoal,storeTime,updateTime,findAll};
+module.exports = {findReport,storeTime,updateTime,findAll};

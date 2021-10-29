@@ -54,7 +54,7 @@ exports.getAllReports = async (req, res) => {
 };
 
 exports.getReportDate = async (req) => {
-  const creatTime = req.body.creatTime;
+  const creatTime = req.body.creatTime;//"2021-10-23"
   const reports = await reportsDataAccess.findReport({ creatTime: creatTime });
   if (!reports[0]) {
     throw new ExpressError(401, " this date is not exist");
@@ -84,7 +84,7 @@ exports.getReportMonth = async (req) => {
   const date = momen().tz("Asia/Kolkata").format();
 
   let changeMonth = momen().tz("Asia/Kolkata").format(`${year}-${month}-DD`);
-  const reports = await reportsDataAccess.findGoal({
+  const reports = await reportsDataAccess.findReport({
     isoDate: {
       $gte: `${changeMonth}T00:00:00Z`,
       $lt: `${date}T00:00:00Z`,
@@ -127,7 +127,7 @@ exports.getReportYear = async (req) => {
   // const date = momen().tz("Asia/Kolkata").format("YYYY-MM-DD");
   const date = momen().tz("Asia/Kolkata").format();
   let changeMonth = momen().tz("Asia/Kolkata").format(`${year}-MM-DD`);
-  const reports = await reportsDataAccess.findGoal({
+  const reports = await reportsDataAccess.findReport({
     isoDate: {
       $gte: `${changeMonth}T00:00:00Z`,
       $lt: `${date}T00:00:00Z`,
@@ -169,7 +169,7 @@ exports.getReportDays = async (req) => {
   priorDate.setDate(priorDate.getDate() - n);
   const lastDate = momen(priorDate).tz("Asia/Kolkata").format("YYYY-MM-DD");
   const date = momen().tz("Asia/Kolkata").format();
-  const reports = await reportsDataAccess.findGoal({
+  const reports = await reportsDataAccess.findReport({
     isoDate: {
       $gte: `${lastDate}T00:00:00Z`,
       $lte: `${date}`

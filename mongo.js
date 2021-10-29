@@ -8,5 +8,5 @@ mongoose
   })
   .then(() => console.log("connected to the database"))
   .catch((err) => {
-    res.send(err);
+    console.log(err)
   });

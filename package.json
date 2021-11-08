@@ -32,6 +32,7 @@
     "request": "^2.88.2",
     "request-promise": "^4.2.6",
     "shelljs": "^0.8.4",
+    "stripe": "^8.186.0",
     "time-zone-converter": "^1.1.0"
   },
   "repository": {

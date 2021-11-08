@@ -13,6 +13,7 @@ require("express-async-errors");
 const userRouters = require("./user/user.router");
 const goalRouters = require("./goal/goal.router");
 const reportRouters = require("./reports/report.router");
+const subscription = require("./subscription/subscription.router")
 const app = express();
 
 app.use(
@@ -36,6 +37,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use("/users", userRouters);
 app.use("/goal", goalRouters);
 app.use("/report", reportRouters);
+app.use('/subscription',subscription)
 app.use(middleware.unknownEndpoint);
 app.use(middleware.errorHandler);
 

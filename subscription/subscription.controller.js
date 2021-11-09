@@ -1,7 +1,7 @@
 const subscriptionDataAccess = require("./subscription.dal");
 const ExpressError = require("../utils/errorGenerator");
 const stripe = require("stripe")(
-  "sk_test_51JpoPBSDI6axxFW0mavHUEd1G44DwwK6pOJSTR07Ck172ZPoKyIjW0UOUOGCycuDgS2Ug3e8Ix7qn3goJyaxtvf400ZHS1YGQ2"
+  "sk_test_51Jts6FF72adyi7uKADmuPOnsUmNiZxt4EXRbni1hyCxh0V2rJn61hvTpTNU5xSaIgpiaR6RxJgJb8zl6HOI6KNlC0092yHHQ0h"
 );
 require("../utils/jwt");
 
@@ -10,22 +10,22 @@ exports.payment = async (req) => {
     .create({
       email: req.body.stripeEmail,
       description: req.body.description,
-      name: "Ashish ajmera",
+      name: req.body.name,
       address: {
-        line1: "510 Townsend St",
-        postal_code: "98140",
-        city: "San Francisco",
-        state: "California",
-        country: "United States",
+        line1: req.body.address,
+        postal_code: req.body.zip,
+        city: req.body.city,
+        state: req.body.state,
+        country: req.body.country,
       },
     })
     .then(async (customer) => {
       let param = {};
       param.card = {
-        number: "4242 4242 4242 4242",
-        exp_month: 5,
-        exp_year: 2025,
-        cvc: "313",
+        number: req.body.cardNumber,
+        exp_month: req.body.expMonth,
+        exp_year: req.body.expYear,
+        cvc: req.body.cvc,
       };
       return {
         token: await stripe.tokens.create(param),
@@ -35,39 +35,56 @@ exports.payment = async (req) => {
     .then(async (result) => {
       const token = result["token"]["id"];
       const id = result.customerId;
-      const addCustomerToken = await stripe.customers.createSource(id, {
-        source: token,
-      });
-      return addCustomerToken;
-    })
-    .then(async (subscription) => {
-      await stripe.subscriptions
-        .create({
-          customer: subscription.customer,
-          items: [
-            {
-              price: "price_1JrLKtSDI6axxFW0mT2bS8Mo",
-            },
-          ],
+      return await stripe.customers
+        .createSource(id, {
+          source: token,
         })
-        .then(async (sub) => {
-          var data = {};
-          data.priceId = sub.plan.id;
-          data.subId = sub.id;
-          data.periodStart = sub.current_period_start;
-          data.periodEnd = sub.current_period_end;
-          data.invoiceId = sub.latest_invoice;
-          // console.log(data);
-          return data;
+        .then(async (subscription) => {
+          await stripe.subscriptions
+            .create({
+              customer: subscription.customer,
+              items: [
+                {
+                  price: req.body.priceId,
+                },
+              ],
+            })
+            .then(async (sub) => {
+              var data = {};
+              data.priceId = sub.plan.id;
+              data.subId = sub.id;
+              data.periodStart = sub.current_period_start;
+              data.periodEnd = sub.current_period_end;
+              data.invoiceId = sub.latest_invoice;
+              return data;
+            })
+            .catch((err) => {
+              return new ExpressError(500, err.message);
+            });
+        })
+        .catch((err) => {
+          return new ExpressError(500, err.message);
         });
+    })
+    .catch((err) => {
+      return new ExpressError(500, err.message);
     });
 };
 //////////////////////
 
+exports.cancleSubscription = async (req) => {
+  await stripe.subscriptions
+    .del("sub_1JtcPQSDI6axxFW0fBYgBDdE")
+    .then(async (customer) => {
+      console.log(customer);
+      return customer;
+    });
+};
+//////////
 const createPlan = async (data) => {
   const plan = await stripe.plans.create({
     amount: data.planPrice * 100,
-    currency: "USD",
+    currency: data.currency,
     interval: "year",
     interval_count: data.stripeDuration,
     product: data.productId,
@@ -75,76 +92,55 @@ const createPlan = async (data) => {
   data.stripePlanId = plan.id;
   return data;
 };
-////////
 
-exports.createProduct = async (product) => {
+exports.createProduct = async (req) => {
   return new Promise(async (resolve, reject) => {
     try {
       return await stripe.products
         .create({
-          name: product.planName,
-          description: product.description,
+          name: req.body.planName,
+          description: req.body.description,
         })
         .then(async (resp) => {
           await stripe.prices
             .create({
-              unit_amount: product.planPrice * 100,
-              currency: "USD",
+              unit_amount: req.body.planPrice * 100,
+              currency: req.body.currency,
               recurring: { interval: "year" },
               product: resp.id,
             })
             .then(async (res) => {
-              product.productId = resp.id;
-              product.priceId = res.id;
-              const result = await createPlan(product);
-
+              req.body.productId = resp.id;
+              req.body.priceId = res.id;
+              const result = await createPlan(req.body);
               return resolve(result);
             });
         });
     } catch (error) {
-      console.log(error);
       return reject(error);
     }
   });
 };
 
-// const createSubscription = async(data,req) =>{
-//         try {
-//            await stripe.subscriptions
-//             .create({
-//               customer:data.id,
-//               items: [
-//                 {
-//                   price:req.priceId
-//                 },
-//               ],
-//             })
-//             .then(async (sub) => {
-//             // console.log("subhash",sub);
-//             const data={}
-//             data.subId = sub.id;
-//             data.periodStart = sub.current_period_start;
-//             data.periodEnd = sub.current_period_end;
-//             data.invoiceId = sub.latest_invoice
-//               return (data);
-//             //   console.log(data);
-//             });
-//         } catch (err) {
-
-//           return (err);
-//         }
-// }
-
-// createSubscription()
 /*
+{
+    
+    "stripeEmail":"subhash@gmail.com",
+    "planName":"basic",
+    "description":"subscription payment",
+    "priceId":"price_1JtuU9F72adyi7uKXRYu5kaQ",
+    "planPrice":200,
+    "currency":"USD",
+    "name":"sk_jmera",
+    "address":"510 Townsend St",
+    "zip":"98140",
+    "city":"San Francisco",
+    "state":"California",
+    "country":"United States",
+    "cardNumber":"4242 4242 4242 4242",
+    "expMonth":5,
+    "expYear":2024,
+    "cvc":123
 
-    "stripeEmail": "uuuuuu@gmail.com",
-    "planName": "bloomia",
-    "description": "emailsender",
-    "planPrice": 20,
-    "productId": "prod_KWO7jLNUGT8fiP",
-    "priceId": "price_1JrLKtSDI6axxFW0mT2bS8Mo",
-    "stripePlanId": "plan_KWO74jZZRLRFsi",
-    sub_1JrMJvSDI6axxFW0aa8bJFJ2',
-
+}
 */

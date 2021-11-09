@@ -11,17 +11,16 @@ router.post("/payment", async (req, res) => {
 
 
 router.post("/product", async (req, res) => {
-    const result = await subscriptionController.createProduct(req.body);
+    const result = await subscriptionController.createProduct(req);
     return res.json(result);
   });
 
+  
+router.post("/cancleSub", async (req, res) => {
+  const result = await subscriptionController.cancleSubscription(req.body);
+  return res.json(result);
+});
+
+
 module.exports = router;
-
-
-
-// "stripeEmail":"husain@gmail.com",
-// "planName":"bloomia",
-// "description":"emails",
-// "priceId":"price_1JrLKtSDI6axxFW0mT2bS8Mo"
-
 

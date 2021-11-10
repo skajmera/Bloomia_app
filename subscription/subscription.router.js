@@ -17,8 +17,8 @@ router.post("/product", async (req, res) => {
 
   
 router.post("/cancleSub", async (req, res) => {
-  const result = await subscriptionController.cancleSubscription(req.body);
-  return res.json(result);
+  const result = await subscriptionController.cancleSubscription(req);
+  return res.send(result);
 });
 
 

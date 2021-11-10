@@ -64,7 +64,7 @@ exports.payment = async (req) => {
         })
         .catch((err) => {
           return new ExpressError(500, err.message);
-        });
+          });
     })
     .catch((err) => {
       return new ExpressError(500, err.message);
@@ -74,10 +74,11 @@ exports.payment = async (req) => {
 
 exports.cancleSubscription = async (req) => {
   await stripe.subscriptions
-    .del("sub_1JtcPQSDI6axxFW0fBYgBDdE")
+    .del(req.body.subscriptionId)
     .then(async (customer) => {
-      console.log(customer);
       return customer;
+    }).catch((err)=>{
+      return err
     });
 };
 //////////

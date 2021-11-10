@@ -20,4 +20,14 @@ const updateGoal = async (goalData) => {
   return goal;
 };
 
-module.exports = { storeGoal, findGoal,updateGoal };
+
+const streakSet = async (streakData) => {
+  const goal = await Goal.findByIdAndUpdate(
+    streakData._id,
+    { $set: streakData.toUpdate },
+    { new: true }
+  );
+  return goal;
+};
+
+module.exports = { storeGoal, findGoal,updateGoal,streakSet };

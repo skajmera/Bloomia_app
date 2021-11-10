@@ -9,6 +9,12 @@ const UserSchema = new mongoose.Schema({
   set: {
     type: Number,
   },
+  setting:{
+    type:String
+  },
+  totalTime:{
+    type:String
+  }
 });
 
 const Goal = mongoose.model("adminData", UserSchema);

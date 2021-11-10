@@ -8,19 +8,15 @@ router.post("/payment", async (req, res) => {
   return res.json(result);
 });
 
-
-
 router.post("/product", async (req, res) => {
     const result = await subscriptionController.createProduct(req);
     return res.json(result);
   });
-
   
 router.post("/cancleSub", async (req, res) => {
   const result = await subscriptionController.cancleSubscription(req);
   return res.send(result);
 });
-
 
 module.exports = router;
 

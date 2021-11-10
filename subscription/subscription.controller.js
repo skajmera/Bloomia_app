@@ -6,8 +6,17 @@ const stripe = require("stripe")(
 require("../utils/jwt");
 
 exports.payment = async (req) => {
-  await stripe.customers
-    .create({
+  const customer = await customers(req);
+  const result = await card(customer, req);
+  const subscription = await toke(result, req);
+  const sub = await subscriptionData(subscription, req);
+  const a=await subId(sub);
+  return a
+};
+
+const customers = async (req) => {
+  try {
+    const createCustomer = await stripe.customers.create({
       email: req.body.stripeEmail,
       description: req.body.description,
       name: req.body.name,
@@ -18,70 +27,67 @@ exports.payment = async (req) => {
         state: req.body.state,
         country: req.body.country,
       },
-    })
-    .then(async (customer) => {
-      let param = {};
-      param.card = {
-        number: req.body.cardNumber,
-        exp_month: req.body.expMonth,
-        exp_year: req.body.expYear,
-        cvc: req.body.cvc,
-      };
-      return {
-        token: await stripe.tokens.create(param),
-        customerId: customer.id,
-      };
-    })
-    .then(async (result) => {
-      const token = result["token"]["id"];
-      const id = result.customerId;
-      return await stripe.customers
-        .createSource(id, {
-          source: token,
-        })
-        .then(async (subscription) => {
-          await stripe.subscriptions
-            .create({
-              customer: subscription.customer,
-              items: [
-                {
-                  price: req.body.priceId,
-                },
-              ],
-            })
-            .then(async (sub) => {
-              var data = {};
-              data.priceId = sub.plan.id;
-              data.subId = sub.id;
-              data.periodStart = sub.current_period_start;
-              data.periodEnd = sub.current_period_end;
-              data.invoiceId = sub.latest_invoice;
-              return data;
-            })
-            .catch((err) => {
-              return new ExpressError(500, err.message);
-            });
-        })
-        .catch((err) => {
-          return new ExpressError(500, err.message);
-          });
-    })
-    .catch((err) => {
-      return new ExpressError(500, err.message);
     });
+    return createCustomer;
+  } catch (err) {
+    return(err);
+  }
 };
-//////////////////////
+
+const card = async (customer, req) => {
+  let param = {};
+  param.card = {
+    number: req.body.cardNumber,
+    exp_month: req.body.expMonth,
+    exp_year: req.body.expYear,
+    cvc: req.body.cvc,
+  };
+  return {
+    token: await stripe.tokens.create(param),
+    customerId: customer.id,
+  };
+};
+
+const toke = async (result, req) => {
+  const token = result["token"]["id"];
+  const id = result.customerId;
+  return await stripe.customers.createSource(id, {
+    source: token,
+  });
+};
+
+const subscriptionData = async (subscription, req) => {
+  return await stripe.subscriptions.create({
+    customer: subscription.customer,
+    items: [
+      {
+        price: req.body.priceId,
+      },
+    ],
+  })
+};
+
+const subId = async (sub) => {
+  var data = {};
+  data.priceId = sub.plan.id;
+  data.subId = sub.id;
+  data.periodStart = sub.current_period_start;
+  data.periodEnd = sub.current_period_end;
+  data.invoiceId = sub.latest_invoice;
+  return data;
+};
 
 exports.cancleSubscription = async (req) => {
   await stripe.subscriptions
     .del(req.body.subscriptionId)
     .then(async (customer) => {
       return customer;
-    }).catch((err)=>{
-      return err
+    })
+    .catch((err) => {
+      return err;
     });
 };
-//////////
+
 const createPlan = async (data) => {
   const plan = await stripe.plans.create({
     amount: data.planPrice * 100,

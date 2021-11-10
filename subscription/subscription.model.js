@@ -12,28 +12,10 @@ const subscriptionSchema = new mongoose.Schema({
   stripeEmail:{
     type:String
   },
-  stripeToken:{
+  subscriptionId:{
     type:String
   },
-  customerId:{
-      type:String
-  },
-  cardId:{
-    type:String
-  },
-  cardNumber:{
-    type:String
-  },
-  cvc:{
-    type:Number
-  },
-  expMonth:{
-    type:String
-  },
-  expYear:{
-    type:String
-  },
-  description:{
+  priceId:{
     type:String
   }
 } );

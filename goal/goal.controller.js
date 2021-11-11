@@ -4,9 +4,9 @@ require("../utils/jwt");
 
 exports.updateGoal = async (req) => {
     const {totalGoalTime,set,setType} = req.body;
-    if (!set || !setType || !totalGoalTime) {
-      throw new ExpressError(401, "Bad request");
-    }
+    // if (!set || !setType || !totalGoalTime) {
+    //   throw new ExpressError(401, "Bad request");
+    // }
     const _id =req.token_data._id;
     const updateData = {
       _id,
@@ -41,6 +41,7 @@ exports.updateGoal = async (req) => {
 
   exports.getGoal = async (req) => {
     const userId =req.token_data._id
+    console.log(req.token_data._id);
     const goal = await goalDataAccess.findGoal({userId:userId});
     return {
       error: false,
@@ -49,6 +50,7 @@ exports.updateGoal = async (req) => {
       data: goal,
     };
   };
+
 
   exports.streak = async (req) => {
     const { setting} = req.body;

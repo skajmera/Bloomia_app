@@ -48,6 +48,7 @@ const card = async (customer, req) => {
   };
 };
 
+
 const toke = async (result, req) => {
   const token = result["token"]["id"];
   const id = result.customerId;
@@ -101,33 +102,62 @@ const createPlan = async (data) => {
 };
 
 exports.createProduct = async (req) => {
-  return new Promise(async (resolve, reject) => {
-    try {
-      return await stripe.products
+  // return new Promise(async (resolve, reject) => {
+  //   try {
+
+    createProduct(req)
+      // return await stripe.products
+      //   .create({
+      //     name: req.body.planName,
+      //     description: req.body.description,
+      //   })
+
+        // .then(async (resp) => {
+        //   await stripe.prices
+        //     .create({
+        //       unit_amount: req.body.planPrice * 100,
+        //       currency: req.body.currency,
+        //       recurring: { interval: "year" },
+        //       product: resp.id,
+        //     })
+            // .then(async (res) => {
+            //   req.body.productId = resp.id;
+            //   req.body.priceId = res.id;
+            //   const result = await createPlan(req.body);
+            //   return resolve(result);
+            // });
+        // });
+    // } catch (error) {
+      // return reject(error);
+    // }
+  // });
+};
+
+////////////
+const createProduct = async (data) => {
+return await stripe.products
         .create({
           name: req.body.planName,
           description: req.body.description,
         })
-        .then(async (resp) => {
+      }
+        const price=(async (resp) => {
           await stripe.prices
             .create({
               unit_amount: req.body.planPrice * 100,
               currency: req.body.currency,
               recurring: { interval: "year" },
               product: resp.id,
-            })
-            .then(async (res) => {
+            })})
+
+
+          const creatp=(async (res) => {
               req.body.productId = resp.id;
               req.body.priceId = res.id;
               const result = await createPlan(req.body);
-              return resolve(result);
+              return (result);
             });
-        });
-    } catch (error) {
-      return reject(error);
-    }
-  });
-};
+
 
 /*
 {

@@ -17,9 +17,9 @@ const updateGoal = async (goalData) => {
     { $set: goalData.toUpdate },
     { new: true }
   );
+  console.log(goalData._id);
   return goal;
 };
-
 
 const streakSet = async (streakData) => {
   const goal = await Goal.findByIdAndUpdate(

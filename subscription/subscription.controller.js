@@ -10,8 +10,15 @@ exports.payment = async (req) => {
   const result = await card(customer, req);
   const subscription = await toke(result, req);
   const sub = await subscriptionData(subscription, req);
-  const a=await subId(sub);
-  return a
+  const subData = await subId(sub);
+  const storeData = await subscriptionDataAccess
+    .storeData(subData)
+    .then((data) => {
+      return storeData;
+    })
+    .catch((err) => {
+      return err;
+    });
 };
 
 const customers = async (req) => {
@@ -30,7 +37,7 @@ const customers = async (req) => {
     });
     return createCustomer;
   } catch (err) {
-    return(err);
+    return err;
   }
 };
 
@@ -48,7 +55,6 @@ const card = async (customer, req) => {
   };
 };
 
-
 const toke = async (result, req) => {
   const token = result["token"]["id"];
   const id = result.customerId;
@@ -65,7 +71,7 @@ const subscriptionData = async (subscription, req) => {
         price: req.body.priceId,
       },
     ],
-  })
+  });
 };
 
 const subId = async (sub) => {
@@ -102,62 +108,57 @@ const createPlan = async (data) => {
 };
 
 exports.createProduct = async (req) => {
-  // return new Promise(async (resolve, reject) => {
-  //   try {
-
-    createProduct(req)
-      // return await stripe.products
-      //   .create({
-      //     name: req.body.planName,
-      //     description: req.body.description,
-      //   })
-
-        // .then(async (resp) => {
-        //   await stripe.prices
-        //     .create({
-        //       unit_amount: req.body.planPrice * 100,
-        //       currency: req.body.currency,
-        //       recurring: { interval: "year" },
-        //       product: resp.id,
-        //     })
-            // .then(async (res) => {
-            //   req.body.productId = resp.id;
-            //   req.body.priceId = res.id;
-            //   const result = await createPlan(req.body);
-            //   return resolve(result);
-            // });
-        // });
-    // } catch (error) {
-      // return reject(error);
-    // }
-  // });
+  const data1 = await createProduct(req);
+  const data2 = await price(data1, req);
+  return await creatp(data2, data1, req);
 };
 
-////////////
-const createProduct = async (data) => {
-return await stripe.products
-        .create({
-          name: req.body.planName,
-          description: req.body.description,
-        })
-      }
-        const price=(async (resp) => {
-          await stripe.prices
-            .create({
-              unit_amount: req.body.planPrice * 100,
-              currency: req.body.currency,
-              recurring: { interval: "year" },
-              product: resp.id,
-            })})
+const createProduct = async (req) => {
+  const resp = await stripe.products.create({
+    name: req.body.planName,
+    description: req.body.description,
+  });
+  return resp;
+};
 
+const price = async (resp, req) => {
+  const res = await stripe.prices.create({
+    unit_amount: req.body.planPrice * 100,
+    currency: req.body.currency,
+    recurring: { interval: "year" },
+    product: resp.id,
+  });
+  return res;
+};
 
-          const creatp=(async (res) => {
-              req.body.productId = resp.id;
-              req.body.priceId = res.id;
-              const result = await createPlan(req.body);
-              return (result);
-            });
+const creatp = async (res, resp, req) => {
+  console.log(resp);
+  req.body.productId = resp.id;
+  req.body.priceId = res.id;
+  const result = await createPlan(req.body);
+  return result;
+};
 
+exports.getSubscription = async (req) => {
+  const sub = await subscriptionDataAccess.findSub();
+  return {
+    error: false,
+    sucess: true,
+    message: "Get subscription data",
+    data: sub,
+  };
+};
+
+exports.deletePlan = async (req) => {
+  return await delPlan(req)
+};
+
+const delPlan = async (req) => {
+  const deleteData=await stripe.plans.del(
+    req.body.priceId
+  )
+  return deleteData
+};
 
 /*
 {

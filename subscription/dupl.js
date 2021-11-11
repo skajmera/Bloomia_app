@@ -145,3 +145,31 @@
     "stripePlanId": "plan_KWO74jZZRLRFsi",
     sub_1JrMJvSDI6axxFW0aa8bJFJ2',
 */
+
+
+/*
+{   "setting":"adv: { long: 8, short: 72 },beg: { long: 5: short: 9 }",
+    "stripeEmail":"sk@gmail.com",
+    "planName":"basic",
+    "description":"subscription payment",
+    "priceId":"price_1JtuyXF72adyi7uK7BF7p9vS",
+    "planPrice":200,
+    "currency":"USD",
+    "name":"sk_jmera",
+    "address":"510 Townsend St",
+    "zip":"98140",
+    "city":"San Francisco",
+    "state":"California",
+    "country":"United States",
+    "cardNumber":"4242 4242 4242 4242",
+    "expMonth":5,
+    "expYear":2025,
+    "cvc":123,
+    "email":"subhashajmera2@gmail.com",
+    "password":"subhash",
+    "totalGoalTime":"16"
+
+
+    
+}
+*/

@@ -41,7 +41,6 @@ exports.updateGoal = async (req) => {
 
   exports.getGoal = async (req) => {
     const userId =req.token_data._id
-    console.log(req.token_data._id);
     const goal = await goalDataAccess.findGoal({userId:userId});
     return {
       error: false,

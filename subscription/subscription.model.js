@@ -12,7 +12,7 @@ const subscriptionSchema = new mongoose.Schema({
   stripeEmail:{
     type:String
   },
-  subscriptionId:{
+  subId:{
     type:String
   },
   priceId:{

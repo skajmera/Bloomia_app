@@ -13,7 +13,7 @@ router.put("/updateGoal", authenticateToken, async (req, res) => {
   return res.json(result);
 });
 
-router.put("/streak", authenticateToken, async (req, res) => {
+router.put("/createPreset", authenticateToken, async (req, res) => {
   const result = await goalController.streak(req);
   return res.json(result);
 });

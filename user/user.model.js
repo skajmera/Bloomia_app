@@ -19,7 +19,7 @@ const UserSchema = new mongoose.Schema({
 
   // subscriptionId: {
   //   type: mongoose.Schema.Types.ObjectId,
-  //   ref: 'subscriptions'
+  //   ref: 'subscription'
   // },
   isVerified: {
     type: Boolean,

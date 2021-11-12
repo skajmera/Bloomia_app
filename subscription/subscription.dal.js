@@ -11,10 +11,14 @@ const findSub = async (data) => {
   return reports;
 };
 
-// const deleteSub = async () => {
-//   const delet= await Subscription.deleteOne({});
-//   return delet
-// };                                                                                 
+// const delPlan = async (req) => {
+//   const deleteData=await stripe.plans.del(
+//     req.body.priceId
+//   )
+//   return deleteData
+// };
+
+
 
 
 module.exports = { storeData,findSub};

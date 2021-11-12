@@ -13,7 +13,8 @@ exports.updateGoal = async (req) => {
       toUpdate: {
         set:set,
         totalTime:totalGoalTime,
-        setType:setType
+        setType:setType,
+        userId:_id
       },
     };
     const update = await goalDataAccess.updateGoal(updateData);
@@ -37,7 +38,8 @@ exports.updateGoal = async (req) => {
       sucess: true,
       message: "updated user set goal successfully",
       data: update,
-    }};
+    }
+  };
 
   exports.getGoal = async (req) => {
     const userId =req.token_data._id
@@ -64,11 +66,10 @@ exports.updateGoal = async (req) => {
       },
     };
     const update = await goalDataAccess.streakSet(updateData);
-    console.log("update",update);
     if(!update){
       const data = {
         setting:req.body.setting,
-        userId:_id
+        adminId:_id
     };
     const streakData = await goalDataAccess.storeGoal(data);
     return {
@@ -84,3 +85,15 @@ exports.updateGoal = async (req) => {
       message: "updated streak data successfully",
       data: update,
     }};
+
+
+    exports.getCreatePreset = async (req) => {
+      const adminId =req.token_data._id
+      const streak = await goalDataAccess.findGoal({adminId:adminId});
+      return {
+        error: false,
+        sucess: true,
+        message: "Get streak data",
+        data:streak,
+      };
+    };

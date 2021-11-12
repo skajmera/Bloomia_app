@@ -8,6 +8,11 @@ router.get("/getGoalData", authenticateToken, async (request, response) => {
   return response.json(result);
 });
 
+router.get("/getCreatePreset", authenticateToken, async (request, response) => {
+  const result = await goalController.getCreatePreset(request);
+  return response.json(result);
+});
+
 router.put("/updateGoal", authenticateToken, async (req, res) => {
   const result = await goalController.updateGoal(req);
   return res.json(result);

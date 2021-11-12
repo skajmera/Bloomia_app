@@ -1,5 +1,7 @@
 const subscriptionDataAccess = require("./subscription.dal");
 const ExpressError = require("../utils/errorGenerator");
+const momen = require("moment-timezone");
+
 const stripe = require("stripe")(
   "sk_test_51Jts6FF72adyi7uKADmuPOnsUmNiZxt4EXRbni1hyCxh0V2rJn61hvTpTNU5xSaIgpiaR6RxJgJb8zl6HOI6KNlC0092yHHQ0h"
 );
@@ -11,14 +13,9 @@ exports.payment = async (req) => {
   const subscription = await toke(result, req);
   const sub = await subscriptionData(subscription, req);
   const subData = await subId(sub);
-  const storeData = await subscriptionDataAccess
-    .storeData(subData)
-    .then((data) => {
-      return storeData;
-    })
-    .catch((err) => {
-      return err;
-    });
+  subData.createTime=momen().tz("Asia/Kolkata").format("YYYY-MM-DD");
+
+  return await subscriptionDataAccess.storeData(subData);
 };
 
 const customers = async (req) => {
@@ -85,14 +82,12 @@ const subId = async (sub) => {
 };
 
 exports.cancleSubscription = async (req) => {
-  await stripe.subscriptions
-    .del(req.body.subscriptionId)
-    .then(async (customer) => {
-      return customer;
-    })
-    .catch((err) => {
-      return err;
-    });
+  return await canclesub(req);
+};
+
+const canclesub = async (req) => {
+  const subscribe = await stripe.subscriptions.del(req.body.subscriptionId);
+  return subscribe;
 };
 
 const createPlan = async (data) => {
@@ -132,7 +127,6 @@ const price = async (resp, req) => {
 };
 
 const creatp = async (res, resp, req) => {
-  console.log(resp);
   req.body.productId = resp.id;
   req.body.priceId = res.id;
   const result = await createPlan(req.body);
@@ -150,17 +144,26 @@ exports.getSubscription = async (req) => {
 };
 
 exports.deletePlan = async (req) => {
-  return await delPlan(req)
+  return await delPlan(req);
 };
+
 
 const delPlan = async (req) => {
-  const deleteData=await stripe.plans.del(
-    req.body.priceId
-  )
-  return deleteData
+  const deleteData = await stripe.plans.del(req.body.priceId);
+  return deleteData;
 };
 
+// const report=(async()=>{
+//   const reportTypes = await stripe.reporting.reportTypes.list();
+//  const a= await stripe.reporting.reportTypes.retrieve(
+//   'balance.summary.1'
+// )
+// console.log(reportTypes);
+// })
+// report()
+
 /*
+
 {
     
     "stripeEmail":"subhash@gmail.com",
@@ -178,7 +181,6 @@ const delPlan = async (req) => {
     "cardNumber":"4242 4242 4242 4242",
     "expMonth":5,
     "expYear":2024,
-    "cvc":123
+    "cvc":1
 
-}
 */

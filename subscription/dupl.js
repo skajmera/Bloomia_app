@@ -168,8 +168,6 @@
     "email":"subhashajmera2@gmail.com",
     "password":"subhash",
     "totalGoalTime":"16"
-
-
-    
 }
+
 */

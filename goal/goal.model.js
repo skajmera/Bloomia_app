@@ -14,6 +14,9 @@ const UserSchema = new mongoose.Schema({
   },
   totalTime:{
     type:String
+  },
+  adminId:{
+    type:String
   }
 });
 

@@ -12,22 +12,30 @@ const findGoal = async (data) => {
 };
 
 const updateGoal = async (goalData) => {
+
+  
   const goal = await Goal.findOneAndUpdate(
     goalData._id,
     { $set: goalData.toUpdate },
     { new: true }
   );
-  console.log(goalData._id);
   return goal;
 };
 
 const streakSet = async (streakData) => {
-  const goal = await Goal.findByIdAndUpdate(
-    streakData._id,
+  const goal = await Goal.findOneAndUpdate(
+    {adminId:streakData._id},
     { $set: streakData.toUpdate },
     { new: true }
   );
   return goal;
 };
+
+
+const deAll=async()=>{
+    const user=await Goal.remove({})
+    console.log(user)
+  }
+// deAll()
 
 module.exports = { storeGoal, findGoal,updateGoal,streakSet };

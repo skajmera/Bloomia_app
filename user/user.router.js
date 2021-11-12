@@ -29,8 +29,7 @@ router.put("/updatePassword", authenticateToken, async (req, res) => {
   return res.send(result);
 });
 
-router.put(
-  "/upload",
+router.put("/upload",
   authenticateToken,
   upload.single("attachments"),
   async (req, res) => {

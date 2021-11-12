@@ -17,6 +17,9 @@ const subscriptionSchema = new mongoose.Schema({
   },
   priceId:{
     type:String
+  },
+  createTime:{
+    type:String
   }
 } );
 

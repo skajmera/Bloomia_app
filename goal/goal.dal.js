@@ -15,7 +15,7 @@ const updateGoal = async (goalData) => {
 
   
   const goal = await Goal.findOneAndUpdate(
-    goalData._id,
+    {userId:goalData._id},
     { $set: goalData.toUpdate },
     { new: true }
   );

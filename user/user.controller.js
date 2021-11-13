@@ -229,8 +229,8 @@ exports.resetPassword = async (req, res) => {
 };
 
 exports.reminderTime = async (req, res) => {
-  const { subject, text, timezone, reminderTime } = req.body;
-  if (!subject || !text || !timezone || !reminderTime) {
+  const { dailyReminder,subject, text, timezone, reminderTime } = req.body;
+  if (!dailyReminder || !subject || !text || !timezone || !reminderTime) {
     throw new ExpressError(401, "Bad request");
   }
   const _id = req.token_data._id;
@@ -238,6 +238,7 @@ exports.reminderTime = async (req, res) => {
     _id,
     toUpdate: {
       subject: req.body.subject,
+      dailyReminder:req.body.dailyReminder,
       text: req.body.text,
       timezone: req.body.timezone,
       newDate: momen().tz(req.body.timezone).format("YYYY-MM-DD HH:mm:ss ZZ"),

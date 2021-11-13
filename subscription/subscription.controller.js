@@ -13,9 +13,8 @@ exports.payment = async (req) => {
   const subscription = await toke(result, req);
   const sub = await subscriptionData(subscription, req);
   const subData = await subId(sub);
-  subData.createTime = momen().tz("Asia/Kolkata").format("YYYY-MM-DD");
-  subData.isoDate =
-    momen().tz("Asia/Kolkata").format("YYYY-MM-DD") + "T00:00:00Z";
+  subData.createTime=momen().tz("Asia/Kolkata").format("YYYY-MM-DD");
+  subData.isoDate=momen().tz("Asia/Kolkata").format("YYYY-MM-DD")+"T00:00:00Z" 
   return await subscriptionDataAccess.storeData(subData);
 };
 
@@ -134,6 +133,7 @@ const creatp = async (res, resp, req) => {
   return result;
 };
 
+
 // exports.getSubscription = async (req) => {
 //   const createTime = req.body.createTime;//"2021-10-23"
 //   const sub = await subscriptionDataAccess.findSub({createTime:createTime});
@@ -160,7 +160,7 @@ const delPlan = async (req) => {
 };
 
 exports.getReportDays = async (req) => {
-  const n = 30; //req.body.dayNumber;
+  const n = 30//req.body.dayNumber;
   let priorDate = new Date();
   priorDate.setDate(priorDate.getDate() - n);
   const lastDate = momen(priorDate).tz("Asia/Kolkata").format("YYYY-MM-DD");
@@ -168,28 +168,28 @@ exports.getReportDays = async (req) => {
   const reports = await subscriptionDataAccess.findSub({
     isoDate: {
       $gte: `${lastDate}T00:00:00Z`,
-      $lte: `${date}`,
-    },
-  });
+      $lte: `${date}`
+    }
+  })
   if (reports.length === 0) {
     throw new ExpressError(401, " data is not found ");
   }
-  let totalSubscription = 0;
-  for (i of reports) {
+  let totalSubscription=0
+  for(i of reports){
     totalSubscription++;
   }
   return {
-    error: false,
-    sucess: true,
-    message: "Get subscription last 30 days",
-    // data: reports,
-    totalSubscription: totalSubscription,
-  };
+        error: false,
+        sucess: true,
+        message: "Get subscription last 30 days",
+        // data: reports,
+        totalSubscription:totalSubscription
+      };
 };
 
 exports.getReportYear = async (req) => {
   let year = momen().tz("Asia/Kolkata").format("YYYY");
-  let n = req.body.yearNumber;
+  let n = 1
   year = year - n;
   // const date = momen().tz("Asia/Kolkata").format("YYYY-MM-DD");
   const date = momen().tz("Asia/Kolkata").format();
@@ -203,21 +203,22 @@ exports.getReportYear = async (req) => {
   if (!reports[0]) {
     throw new ExpressError(401, " data is not found ");
   }
-  let totalSubscription = 0;
-  for (i of reports) {
+  let totalSubscription=0
+  for(i of reports){
     totalSubscription++;
   }
   return {
-    error: false,
-    sucess: true,
-    message: "Get subscription last year",
-    // data: reports,
-    totalSubscription: totalSubscription,
-  };
+        error: false,
+        sucess: true,
+        message: "Get subscription last year",
+        // data: reports,
+        totalSubscription:totalSubscription
+      };
 };
 
+
 exports.getReportWeekly = async (req) => {
-  const n = 7;
+  const n = 7
   let priorDate = new Date();
   priorDate.setDate(priorDate.getDate() - n);
   const lastDate = momen(priorDate).tz("Asia/Kolkata").format("YYYY-MM-DD");
@@ -225,28 +226,28 @@ exports.getReportWeekly = async (req) => {
   const reports = await subscriptionDataAccess.findSub({
     isoDate: {
       $gte: `${lastDate}T00:00:00Z`,
-      $lte: `${date}`,
-    },
-  });
+      $lte: `${date}`
+    }
+  })
   if (reports.length === 0) {
     throw new ExpressError(401, " data is not found ");
   }
-  let totalSubscription = 0;
-  for (i of reports) {
+  let totalSubscription=0
+  for(i of reports){
     totalSubscription++;
   }
   return {
-    error: false,
-    sucess: true,
-    message: "Get subscription weekly",
-    data: reports,
-    totalSubscription: totalSubscription,
-  };
+        error: false,
+        sucess: true,
+        message: "Get subscription weekly",
+        data: reports,
+        totalSubscription:totalSubscription
+      };
 };
 
 exports.getReport6Month = async (req) => {
   let m = momen().tz("Asia/Kolkata").format("MM");
-  let n = 6;
+  let n = 6
   if (n > m) {
     n = n - m;
     m = 12;
@@ -256,29 +257,31 @@ exports.getReport6Month = async (req) => {
   if (month < 10) {
     month = "0" + month;
   }
+  // const lastDate = momen(priorDate).tz("Asia/Kolkata").format("YYYY-MM-DD");
   const lastDate = momen().tz("Asia/Kolkata").format(`YYYY-${month}-DD`);
   const date = momen().tz("Asia/Kolkata").format();
   const reports = await subscriptionDataAccess.findSub({
     isoDate: {
       $gte: `${lastDate}T00:00:00Z`,
-      $lte: `${date}`,
-    },
-  });
+      $lte: `${date}`
+    }
+  })
   if (reports.length === 0) {
     throw new ExpressError(401, " data is not found ");
   }
-  let totalSubscription = 0;
-  for (i of reports) {
+  let totalSubscription=0
+  for(i of reports){
     totalSubscription++;
   }
   return {
-    error: false,
-    sucess: true,
-    message: "Get subscription last six month",
-    data: reports,
-    totalSubscription: totalSubscription,
-  };
+        error: false,
+        sucess: true,
+        message: "Get subscription last six month",
+        data: reports,
+        totalSubscription:totalSubscription
+      };
 };
+
 
 /*
 
@@ -302,3 +305,8 @@ exports.getReport6Month = async (req) => {
     "cvc":1
 
 */
+
+
+
+
+

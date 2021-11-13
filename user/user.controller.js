@@ -28,6 +28,8 @@ exports.createUser = async (req) => {
     isVerified: false,
     first_name: req.body.first_name,
     last_name: req.body.last_name,
+    dailyReminder:"false",
+    reminderTime:"00",
     contact: req.body.contact,
     email: req.body.email,
     password: passwordHash,

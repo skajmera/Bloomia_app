@@ -80,6 +80,7 @@ exports.getReportMonth = async (req) => {
   if (month < 10) {
     month = "0" + month;
   }
+
   // const date = momen().tz("Asia/Kolkata").format("YYYY-MM-DD");
   const date = momen().tz("Asia/Kolkata").format();
 

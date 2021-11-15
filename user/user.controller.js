@@ -240,7 +240,7 @@ exports.reminderTime = async (req, res) => {
     _id,
     toUpdate: {
       subject: req.body.subject,
-      dailyReminder:req.body.dailyReminder,
+      dailyReminder:dailyReminder,
       text: req.body.text,
       timezone: req.body.timezone,
       newDate: momen().tz(req.body.timezone).format("YYYY-MM-DD HH:mm:ss ZZ"),

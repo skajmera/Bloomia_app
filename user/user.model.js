@@ -4,7 +4,7 @@ const UserSchema = new mongoose.Schema({
     type: String,
   },
   dailyReminder:{
-    type:String
+    type: String,
   },
   newDate: {
     type: String,

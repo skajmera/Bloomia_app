@@ -8,6 +8,7 @@ const subscriptionController = require("../subscription/subscription.controller"
 //   return response.json(result);
 // }));
 
+
 router.delete("/deletePlan", ( async (request, response) => {
   const result = await subscriptionController.deletePlan(request);
   return response.json(result);
@@ -47,6 +48,11 @@ router.get("/getReportLast6Month",async (request, response) => {
   const result = await subscriptionController.getReport6Month(request);
   return response.json(result);
 });
+
+// router.get("/currentStreak",async (request, response) => {
+//   const result = await subscriptionController.currentStreak(request);
+//   return response.json(result);
+// });
 
 module.exports = router; 
 

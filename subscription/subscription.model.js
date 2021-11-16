@@ -23,8 +23,14 @@ const subscriptionSchema = new mongoose.Schema({
   },
   isoDate:{
     type:String
+  },
+  longestStreak:{
+    type:String
+  },
+  currentStreak:{
+    type:String
   }
-} );
+});
 
 const Subscription = mongoose.model("subscription", subscriptionSchema);
 module.exports = Subscription;

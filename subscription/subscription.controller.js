@@ -1,137 +1,28 @@
 const subscriptionDataAccess = require("./subscription.dal");
 const ExpressError = require("../utils/errorGenerator");
 const momen = require("moment-timezone");
-
-const stripe = require("stripe")(
-  "sk_test_51Jts6FF72adyi7uKADmuPOnsUmNiZxt4EXRbni1hyCxh0V2rJn61hvTpTNU5xSaIgpiaR6RxJgJb8zl6HOI6KNlC0092yHHQ0h"
-);
 require("../utils/jwt");
 
 exports.payment = async (req) => {
-  const customer = await customers(req);
-  const result = await card(customer, req);
-  const subscription = await toke(result, req);
-  const sub = await subscriptionData(subscription, req);
-  const subData = await subId(sub);
-  subData.createTime = momen().tz("Asia/Kolkata").format("YYYY-10-DD");
+  const customer = await subscriptionDataAccess.customers(req);
+  const result = await subscriptionDataAccess.card(customer, req);
+  const subscription = await subscriptionDataAccess.toke(result, req);
+  const sub = await subscriptionDataAccess.subscriptionData(subscription, req);
+  const subData = await subscriptionDataAccess.subId(sub);
+  subData.createTime = momen().tz("Asia/Kolkata").format("YYYY-MM-DD");
   subData.isoDate =
-    momen().tz("Asia/Kolkata").format("YYYY-10-DD") + "T00:00:00Z";
+    momen().tz("Asia/Kolkata").format("YYYY-MM-DD") + "T00:00:00Z";
   return await subscriptionDataAccess.storeData(subData);
 };
 
-const customers = async (req) => {
-  try {
-    const createCustomer = await stripe.customers.create({
-      email: req.body.stripeEmail,
-      description: req.body.description,
-      name: req.body.name,
-      address: {
-        line1: req.body.address,
-        postal_code: req.body.zip,
-        city: req.body.city,
-        state: req.body.state,
-        country: req.body.country,
-      },
-    });
-    return createCustomer;
-  } catch (err) {
-    return err;
-  }
-};
-
-const card = async (customer, req) => {
-  let param = {};
-  param.card = {
-    number: req.body.cardNumber,
-    exp_month: req.body.expMonth,
-    exp_year: req.body.expYear,
-    cvc: req.body.cvc,
-  };
-  return {
-    token: await stripe.tokens.create(param),
-    customerId: customer.id,
-  };
-};
-
-const toke = async (result, req) => {
-  const token = result["token"]["id"];
-  const id = result.customerId;
-  return await stripe.customers.createSource(id, {
-    source: token,
-  });
-};
-
-const subscriptionData = async (subscription, req) => {
-  return await stripe.subscriptions.create({
-    customer: subscription.customer,
-    items: [
-      {
-        price: req.body.priceId,
-      },
-    ],
-  });
-};
-
-const subId = async (sub) => {
-  var data = {};
-  data.priceId = sub.plan.id;
-  data.subId = sub.id;
-  data.periodStart = sub.current_period_start;
-  data.periodEnd = sub.current_period_end;
-  data.invoiceId = sub.latest_invoice;
-  return data;
-};
-
 exports.cancleSubscription = async (req) => {
-  return await canclesub(req);
-};
-
-const canclesub = async (req) => {
-  const subscribe = await stripe.subscriptions.del(req.body.subscriptionId);
-  return subscribe;
-};
-
-const createPlan = async (data) => {
-  const plan = await stripe.plans.create({
-    amount: data.planPrice * 100,
-    currency: data.currency,
-    interval: "year",
-    interval_count: data.stripeDuration,
-    product: data.productId,
-  });
-  data.stripePlanId = plan.id;
-  return data;
+  return await subscriptionDataAccess.canclesub(req);
 };
 
 exports.createProduct = async (req) => {
-  const data1 = await createProduct(req);
-  const data2 = await price(data1, req);
-  return await creatp(data2, data1, req);
-};
-
-const createProduct = async (req) => {
-  const resp = await stripe.products.create({
-    name: req.body.planName,
-    description: req.body.description,
-  });
-  return resp;
-};
-
-const price = async (resp, req) => {
-  const res = await stripe.prices.create({
-    unit_amount: req.body.planPrice * 100,
-    currency: req.body.currency,
-    recurring: { interval: "year" },
-    product: resp.id,
-  });
-  return res;
-};
-
-const creatp = async (res, resp, req) => {
-  req.body.productId = resp.id;
-  req.body.priceId = res.id;
-  const result = await createPlan(req.body);
-  return result;
+  const data1 = await subscriptionDataAccess.createProduct(req);
+  const data2 = await subscriptionDataAccess.price(data1, req);
+  return await subscriptionDataAccess.creatp(data2, data1, req);
 };
 
 // exports.getSubscription = async (req) => {
@@ -151,16 +42,11 @@ const creatp = async (res, resp, req) => {
 // };
 
 exports.deletePlan = async (req) => {
-  return await delPlan(req);
-};
-
-const delPlan = async (req) => {
-  const deleteData = await stripe.plans.del(req.body.priceId);
-  return deleteData;
+  return await subscriptionDataAccess.delPlan(req);
 };
 
 exports.getReportDays = async (req) => {
-  const n = 30; //req.body.dayNumber;
+  const n = 30; 
   let priorDate = new Date();
   priorDate.setDate(priorDate.getDate() - n);
   const lastDate = momen(priorDate).tz("Asia/Kolkata").format("YYYY-MM-DD");
@@ -191,7 +77,6 @@ exports.getReportYear = async (req) => {
   let year = momen().tz("Asia/Kolkata").format("YYYY");
   let n = 1;
   year = year - n;
-  // const date = momen().tz("Asia/Kolkata").format("YYYY-MM-DD");
   const date = momen().tz("Asia/Kolkata").format();
   let changeMonth = momen().tz("Asia/Kolkata").format(`${year}-MM-DD`);
   const reports = await subscriptionDataAccess.findSub({
@@ -211,7 +96,7 @@ exports.getReportYear = async (req) => {
     let monthName = momen(new Date(i.createTime)).format("MMM YYYY");
     if (list2.includes(monthName)) {
       totalSubscription++;
-    console.log(monthName,totalSubscription);
+      console.log(monthName, totalSubscription);
     } else {
       totalSubscription = 1;
       list2.push(monthName);
@@ -269,7 +154,6 @@ exports.getReport6Month = async (req) => {
   if (month < 10) {
     month = "0" + month;
   }
-  // const lastDate = momen(priorDate).tz("Asia/Kolkata").format("YYYY-MM-DD");
   const lastDate = momen().tz("Asia/Kolkata").format(`YYYY-${month}-DD`);
   const date = momen().tz("Asia/Kolkata").format();
   const reports = await subscriptionDataAccess.findSub({
@@ -289,7 +173,7 @@ exports.getReport6Month = async (req) => {
     let monthName = momen(new Date(i.createTime)).format("MMM YYYY");
     if (list2.includes(monthName)) {
       totalSubscription++;
-    // console.log(monthName,totalSubscription);
+      // console.log(monthName,totalSubscription);
     } else {
       totalSubscription = 1;
       list2.push(monthName);
@@ -306,6 +190,13 @@ exports.getReport6Month = async (req) => {
     data: list1,
   };
 };
+
+// exports.currentStreak = async (req) => {
+//   createTime = momen().tz("Asia/Kolkata").format("YYYY-MM-DD");
+//   currentStreak=req.body.
+//   // subData.isoDate = momen().tz("Asia/Kolkata").format("YYYY-MM-DD") + "T00:00:00Z";
+//   return await subscriptionDataAccess.storeData(subData);
+// };
 
 /*
 {
@@ -324,5 +215,5 @@ exports.getReport6Month = async (req) => {
     "cardNumber":"4242 4242 4242 4242",
     "expMonth":5,
     "expYear":2024,
-    "cvc":1
+    "cvc":178
 */

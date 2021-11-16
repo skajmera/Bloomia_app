@@ -307,11 +307,8 @@ exports.getReport6Month = async (req) => {
   };
 };
 
-
 /*
-
 {
-    
     "stripeEmail":"subhash@gmail.com",
     "planName":"basic",
     "description":"subscription payment",
@@ -328,5 +325,4 @@ exports.getReport6Month = async (req) => {
     "expMonth":5,
     "expYear":2024,
     "cvc":1
-
 */

@@ -3,10 +3,10 @@ const { authenticateToken } = require("../utils/jwt");
 const router = express.Router();
 const subscriptionController = require("../subscription/subscription.controller");
 
-router.get("/getSubscription",(  async (request, response) => {
-  const result = await subscriptionController.getSubscription(request);
-  return response.json(result);
-}));
+// router.get("/getSubscription",(  async (request, response) => {
+//   const result = await subscriptionController.getSubscription(request);
+//   return response.json(result);
+// }));
 
 router.delete("/deletePlan", ( async (request, response) => {
   const result = await subscriptionController.deletePlan(request);
@@ -28,22 +28,22 @@ router.post("/cancleSub", async (req, res) => {
   return res.send(result);
 });
 
-router.post("/getLastYear", async (request, response) => {
+router.get("/getLastYear", async (request, response) => {
   const result = await subscriptionController.getReportYear(request);
   return response.json(result);
 });
 
-router.post("/getLast30Days",async (request, response) => {
+router.get("/getLast30Days",async (request, response) => {
   const result = await subscriptionController.getReportDays(request);
   return response.json(result);
 });
 
-router.post("/getReportWeekly",async (request, response) => {
+router.get("/getReportWeekly",async (request, response) => {
   const result = await subscriptionController.getReportWeekly(request);
   return response.json(result);
 });
 
-router.post("/getReportLast6Month",async (request, response) => {
+router.get("/getReportLast6Month",async (request, response) => {
   const result = await subscriptionController.getReport6Month(request);
   return response.json(result);
 });

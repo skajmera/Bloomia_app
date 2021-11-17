@@ -93,6 +93,7 @@ exports.getReportYear = async (req) => {
   let totalSubscription = 0;
   var dic = {};
   for (i of reports) {
+    console.log(list2);
     let monthName = momen(new Date(i.createTime)).format("MMM YYYY");
     if (list2.includes(monthName)) {
       totalSubscription++;
@@ -108,7 +109,7 @@ exports.getReportYear = async (req) => {
   return {
     error: false,
     sucess: true,
-    d: reports,
+    // d: reports,
     message: "Get report year ",
     data: list1,
   };

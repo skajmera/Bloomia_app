@@ -14,6 +14,8 @@ const userRouters = require("./user/user.router");
 const goalRouters = require("./goal/goal.router");
 const reportRouters = require("./reports/report.router");
 const subscription = require("./subscription/subscription.router")
+const adminRouters = require("./admin/admin.router");
+
 const app = express();
 
 app.use(
@@ -38,6 +40,8 @@ app.use("/users", userRouters);
 app.use("/goal", goalRouters);
 app.use("/report", reportRouters);
 app.use('/subscription',subscription)
+app.use('/admin',adminRouters)
+
 app.use(middleware.unknownEndpoint);
 app.use(middleware.errorHandler);
 

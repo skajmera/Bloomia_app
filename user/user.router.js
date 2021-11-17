@@ -4,6 +4,7 @@ const upload = require("../middleware/multer");
 const { authenticateToken } = require("../utils/jwt");
 const router = express.Router();
 const userController = require("../user/user.controller");
+
 router.post("/signup", async (req, res) => {
   const result = await userController.createUser(req);
   return res.send(result);

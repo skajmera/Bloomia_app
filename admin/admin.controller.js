@@ -12,6 +12,9 @@ exports.inviteUser = async (req, res) => {
     }
     const data = await userDataAccess.findUserByUsername({email});
     const newData = await adminDataAccess.findEmail({email});
+    if(newData){
+        return "already send mail"
+    }
 
     if(!data && !newData){
       const otpSend = {

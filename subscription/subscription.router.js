@@ -3,10 +3,10 @@ const { authenticateToken } = require("../utils/jwt");
 const router = express.Router();
 const subscriptionController = require("../subscription/subscription.controller");
 
-// router.get("/getSubscription",(  async (request, response) => {
-//   const result = await subscriptionController.getSubscription(request);
-//   return response.json(result);
-// }));
+router.get("/todayTotalAmount",(  async (request, response) => {
+  const result = await subscriptionController.getTotalAmountToday(request);
+  return response.json(result);
+}));
 
 router.delete("/deletePlan", ( async (request, response) => {
   const result = await subscriptionController.deletePlan(request);
@@ -45,6 +45,16 @@ router.get("/getReportWeekly",async (request, response) => {
 
 router.get("/getReportLast6Month",async (request, response) => {
   const result = await subscriptionController.getReport6Month(request);
+  return response.json(result);
+});
+
+router.get("/totalAmountWeekly",async (request, response) => {
+  const result = await subscriptionController.getTotalAmountWeekly(request);
+  return response.json(result);
+});
+
+router.get("/getLast30DaysTotalAmount",async (request, response) => {
+  const result = await subscriptionController.get30DaysTotalAmountDays(request);
   return response.json(result);
 });
 

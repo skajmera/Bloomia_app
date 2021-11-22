@@ -25,25 +25,27 @@ exports.createProduct = async (req) => {
   return await subscriptionDataAccess.creatp(data2, data1, req);
 };
 
-// exports.getSubscription = async (req) => {
-//   const createTime = req.body.createTime;//"2021-10-23"
-//   const sub = await subscriptionDataAccess.findSub({createTime:createTime});
-//   let totalSubscription=0
-//   for(i of sub){
-//     totalSubscription++;
-//   }
-//   return {
-//     error: false,
-//     sucess: true,
-//     message: "Get subscription data",
-//     data: sub,
-//     totalSubscription:totalSubscription
-//   };
-// };
+exports.getTotalAmountToday = async (req) => {
+  const createTime = momen().tz("Asia/Kolkata").format("YYYY-MM-DD");//req.body.createTime;//"2021-10-23"
+  const sub = await subscriptionDataAccess.findSub({createTime:createTime});
+  let totalAmount=0
+  for(i of sub){
+    if(i.amount!==undefined)
+    totalAmount=totalAmount+i.amount;
+  }
+  return {
+    error: false,
+    sucess: true,
+    message: "Get today total amount data",
+    data: sub,
+    totalAmount:totalAmount
+  };
+};
 
 exports.deletePlan = async (req) => {
   return await subscriptionDataAccess.delPlan(req);
 };
+
 
 exports.getReportDays = async (req) => {
   const n = 30;
@@ -190,6 +192,63 @@ exports.getReport6Month = async (req) => {
   };
 };
 
+exports.getTotalAmountWeekly = async (req) => {
+  const n = 7;
+  let priorDate = new Date();
+  priorDate.setDate(priorDate.getDate() - n);
+  const lastDate = momen(priorDate).tz("Asia/Kolkata").format("YYYY-MM-DD");
+  const date = momen().tz("Asia/Kolkata").format();
+  const reports = await subscriptionDataAccess.findSub({
+    isoDate: {
+      $gte: `${lastDate}T00:00:00Z`,
+      $lte: `${date}`,
+    },
+  });
+  if (reports.length === 0) {
+    throw new ExpressError(401," data is not found ");
+  }
+  let totalAmount=0
+  for(i of reports){
+    if(i.amount!==undefined)
+    totalAmount=totalAmount+i.amount;
+  }
+  return {
+    error: false,
+    sucess: true,
+    message: "Get weekly total amount data",
+    data: reports,
+    totalAmount:totalAmount
+  };
+};
+
+exports.get30DaysTotalAmountDays = async (req) => {
+  const n = 30;
+  let priorDate = new Date();
+  priorDate.setDate(priorDate.getDate() - n);
+  const lastDate = momen(priorDate).tz("Asia/Kolkata").format("YYYY-MM-DD");
+  const date = momen().tz("Asia/Kolkata").format();
+  const reports = await subscriptionDataAccess.findSub({
+    isoDate: {
+      $gte: `${lastDate}T00:00:00Z`,
+      $lte: `${date}`,
+    },
+  });
+  if (reports.length === 0) {
+    throw new ExpressError(401, " data is not found ");
+  }
+  let totalAmount=0
+  for(i of reports){
+    if(i.amount!==undefined)
+    totalAmount=totalAmount+i.amount;
+  }
+  return {
+    error: false,
+    sucess: true,
+    message: "Get 30Days total amount data",
+    data: reports,
+    totalAmount:totalAmount
+  };
+};
 /*
 {
     "stripeEmail":"subhash@gmail.com",

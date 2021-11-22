@@ -10,8 +10,8 @@ exports.payment = async (req) => {
   const sub = await subscriptionDataAccess.subscriptionData(subscription, req);
   const subData = await subscriptionDataAccess.subId(sub);
   subData.createTime = momen().tz("Asia/Kolkata").format("YYYY-MM-DD");
-  subData.isoDate =
-    momen().tz("Asia/Kolkata").format("YYYY-MM-DD") + "T00:00:00Z";
+  subData.isoDate = momen().tz("Asia/Kolkata").format("YYYY-MM-DD") + "T00:00:00Z";
+  subData.amount=sub.plan.amount
   return await subscriptionDataAccess.storeData(subData);
 };
 
@@ -46,7 +46,7 @@ exports.deletePlan = async (req) => {
 };
 
 exports.getReportDays = async (req) => {
-  const n = 30; 
+  const n = 30;
   let priorDate = new Date();
   priorDate.setDate(priorDate.getDate() - n);
   const lastDate = momen(priorDate).tz("Asia/Kolkata").format("YYYY-MM-DD");
@@ -79,7 +79,7 @@ exports.getReportYear = async (req) => {
   year = year - n;
   const date = momen().tz("Asia/Kolkata").format();
   let changeMonth = momen().tz("Asia/Kolkata").format(`${year}-MM-DD`);
-  const reports = await subscriptionDataAccess.findSub({
+  let reports = await subscriptionDataAccess.findSub({
     isoDate: {
       $gte: `${changeMonth}T00:00:00Z`,
       $lt: `${date}T00:00:00Z`,
@@ -93,11 +93,9 @@ exports.getReportYear = async (req) => {
   let totalSubscription = 0;
   var dic = {};
   for (i of reports) {
-    console.log(list2);
     let monthName = momen(new Date(i.createTime)).format("MMM YYYY");
     if (list2.includes(monthName)) {
       totalSubscription++;
-      console.log(monthName, totalSubscription);
     } else {
       totalSubscription = 1;
       list2.push(monthName);
@@ -109,7 +107,7 @@ exports.getReportYear = async (req) => {
   return {
     error: false,
     sucess: true,
-    // d: reports,
+    d: reports,
     message: "Get report year ",
     data: list1,
   };
@@ -191,13 +189,6 @@ exports.getReport6Month = async (req) => {
     data: list1,
   };
 };
-
-// exports.currentStreak = async (req) => {
-//   createTime = momen().tz("Asia/Kolkata").format("YYYY-MM-DD");
-//   currentStreak=req.body.
-//   // subData.isoDate = momen().tz("Asia/Kolkata").format("YYYY-MM-DD") + "T00:00:00Z";
-//   return await subscriptionDataAccess.storeData(subData);
-// };
 
 /*
 {

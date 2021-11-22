@@ -29,6 +29,9 @@ const subscriptionSchema = new mongoose.Schema({
   },
   currentStreak:{
     type:String
+  },
+  amount:{
+    type:Number
   }
 });
 

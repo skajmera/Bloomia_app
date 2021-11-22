@@ -52,6 +52,4 @@ router.get("/getReportLast6Month",async (request, response) => {
 //   const result = await subscriptionController.currentStreak(request);
 //   return response.json(result);
 // });
-
 module.exports = router; 
-

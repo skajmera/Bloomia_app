@@ -28,8 +28,8 @@ exports.createUser = async (req) => {
     isVerified: false,
     first_name: req.body.first_name,
     last_name: req.body.last_name,
-    dailyReminder:"false",
-    reminderTime:"00",
+    dailyReminder: "false",
+    reminderTime: "00",
     contact: req.body.contact,
     email: req.body.email,
     password: passwordHash,
@@ -49,6 +49,41 @@ exports.createUser = async (req) => {
     data: storedUser,
   };
 };
+
+exports.createUserByLink = async (req) => {
+  const { email, password, first_name, last_name, contact } = req.body;
+  if (!password || !email || !first_name || !last_name || !contact) {
+    throw new ExpressError(401, "Bad request");
+  }
+  const passwordHash = bcrypt.hashSync(req.body.password, 10);
+  const data = {
+    profileImage: "uploads/1633780506772defaultImage.jpg",
+    isVerified: false,
+    first_name: req.body.first_name,
+    last_name: req.body.last_name,
+    inviteLink:true,
+    dailyReminder: "false",
+    reminderTime: "00",
+    contact: req.body.contact,
+    email: req.body.email,
+    password: passwordHash,
+  };
+  const storedUser = await usersDataAccess.storeUser(data);
+  const otpSend = {
+    from: process.env.email,
+    to: storedUser.email,
+    subject: "Sending email using node.js",
+    text: `http://localhost:3001/Resetpassword/${storedUser._id}`,
+  };
+  myFunction(otpSend);
+  return {
+    error: false,
+    sucess: true,
+    message: "user created successfully",
+    data: storedUser,
+  };
+};
+
 
 exports.loginUser = async (req, res) => {
   const { email, password } = req.body;
@@ -231,7 +266,7 @@ exports.resetPassword = async (req, res) => {
 };
 
 exports.reminderTime = async (req, res) => {
-  const { dailyReminder,subject, text, timezone, reminderTime } = req.body;
+  const { dailyReminder, subject, text, timezone, reminderTime } = req.body;
   if (!dailyReminder || !subject || !text || !timezone || !reminderTime) {
     throw new ExpressError(401, "Bad request");
   }
@@ -240,7 +275,7 @@ exports.reminderTime = async (req, res) => {
     _id,
     toUpdate: {
       subject: req.body.subject,
-      dailyReminder:dailyReminder,
+      dailyReminder: dailyReminder,
       text: req.body.text,
       timezone: req.body.timezone,
       newDate: momen().tz(req.body.timezone).format("YYYY-MM-DD HH:mm:ss ZZ"),
@@ -300,5 +335,3 @@ exports.success = async (req, res) => {
 //   }
 // deAll()
 ///
-
-

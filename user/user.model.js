@@ -24,6 +24,7 @@ const UserSchema = new mongoose.Schema({
   //   type: mongoose.Schema.Types.ObjectId,
   //   ref: 'subscription'
   // },
+
   isVerified: {
     type: Boolean,
     default: false,
@@ -54,6 +55,9 @@ const UserSchema = new mongoose.Schema({
     type: String,
     // required: true,
   },
+  inviteLink:{
+    type:Boolean
+  }
 });
 
 const User = mongoose.model("UserData", UserSchema);

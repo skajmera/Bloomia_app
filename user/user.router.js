@@ -10,6 +10,11 @@ router.post("/signup", async (req, res) => {
   return res.send(result);
 });
 
+router.post("/invite/signup", async (req, res) => {
+  const result = await userController.createUserByLink(req);
+  return res.send(result);
+});
+
 router.get("/getUser", authenticateToken, async (request, response) => {
   const result = await userController.getUser(request);
   return response.json(result);

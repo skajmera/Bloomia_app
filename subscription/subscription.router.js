@@ -58,8 +58,9 @@ router.get("/getLast30DaysTotalAmount",async (request, response) => {
   return response.json(result);
 });
 
-// router.get("/currentStreak",async (request, response) => {
-//   const result = await subscriptionController.currentStreak(request);
-//   return response.json(result);
-// });
+router.get("/getLastYearAmount", async (request, response) => {
+  const result = await subscriptionController.getAmountYear(request);
+  return response.json(result);
+});
+
 module.exports = router; 

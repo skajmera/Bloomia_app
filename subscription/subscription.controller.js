@@ -46,7 +46,6 @@ exports.deletePlan = async (req) => {
   return await subscriptionDataAccess.delPlan(req);
 };
 
-
 exports.getReportDays = async (req) => {
   const n = 30;
   let priorDate = new Date();
@@ -249,6 +248,53 @@ exports.get30DaysTotalAmountDays = async (req) => {
     totalAmount:totalAmount
   };
 };
+
+exports.getAmountYear = async (req) => {
+  let year = momen().tz("Asia/Kolkata").format("YYYY");
+  let n = 1;
+  year = year - n;
+  const date = momen().tz("Asia/Kolkata").format();
+  let changeMonth = momen().tz("Asia/Kolkata").format(`${year}-MM-DD`);
+  let reports = await subscriptionDataAccess.findSub({
+    isoDate: {
+      $gte: `${changeMonth}T00:00:00Z`,
+      $lt: `${date}T00:00:00Z`,
+    },
+  });
+  if (!reports[0]) {
+    throw new ExpressError(401, " data is not found ");
+  }
+  let list1 = [];
+  let list2 = [];
+  let totalAmount = 0;
+  var dic = {};
+  for (i of reports) {
+    if(i.amount !== undefined){
+    let monthName = momen(new Date(i.createTime)).format("MMM YYYY");
+    if (list2.includes(monthName)){
+      totalAmount+=i.amount
+    } else {
+      totalAmount=0
+      totalAmount +=i.amount;
+      list2.push(monthName);
+    }
+    let mName = momen(new Date(i.createTime)).format("MMM YYYY");
+    dic[mName] = { totalAmount: totalAmount };
+  }}
+  list1.push(dic)
+  return {
+    error: false,
+    sucess: true,
+    d: reports,
+    message: "Get total amount year ",
+    data: list1,
+  }
+};
+
+
+
+
+
 /*
 {
     "stripeEmail":"subhash@gmail.com",

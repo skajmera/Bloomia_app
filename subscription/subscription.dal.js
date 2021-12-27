@@ -1,7 +1,6 @@
 const Subscription = require("./subscription.model");
-const stripe = require("stripe")(
-  "sk_test_51Jts6FF72adyi7uKADmuPOnsUmNiZxt4EXRbni1hyCxh0V2rJn61hvTpTNU5xSaIgpiaR6RxJgJb8zl6HOI6KNlC0092yHHQ0h"
-);
+require("dotenv").config();
+const stripe = require("stripe")(process.env.skTestKey);
 
 const storeData = async (subscriptionToStore) => {
   const data = await Subscription.create(subscriptionToStore);
@@ -113,7 +112,7 @@ const canclesub = async (req) => {
   const subscribe = await stripe.subscriptions.del(req.body.subscriptionId);
   return subscribe;
 };
-
+  
 const delPlan = async (req) => {
   const deleteData = await stripe.plans.del(req.body.priceId);
   return deleteData;

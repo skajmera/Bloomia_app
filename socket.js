@@ -6,6 +6,7 @@
 //   console.log(`app listening on port ${port}`);
 // });
 // app.use(express.static(__dirname + "/public"));
+
 // app.get("/", (req, res) => {
 //   res.sendFile(__dirname + "/index.html");
 // });
@@ -29,4 +30,3 @@
 //   });
 //   console.log("total users online:-",count);
 // })
-
